@@ -9,6 +9,7 @@ Team members:
 * Peter Balčirák
 * Pavel Vyskočil
 * Dominik František Bučík
+* Andrej Dravecký
 
 Wiki: https://github.com/LizzardCorp/pb138project/wiki
 
