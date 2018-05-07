@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<accounting>
+	<invoices>
+		<invoice id="1" type="income">
+			<payerID>3</payerID>
+			<recipientID>1</recipientID>
+			<issueDate>1944-01-13</issueDate>
+			<dueDate>1944-03-20</dueDate>
+			<totalPrice>2500000.00</totalPrice>
+			<items>
+				<item>
+					<name>Katyusha</name>
+					<description>The Katyusha multiple rocket launcher is a type of rocket artillery first built and fielded by the Soviet Union in World War II.</description>
+					<price>500000.00</price>
+					<count>4</count>
+					<totalPrice>2000000.00</totalPrice>
+				</item>
+				<item>
+					<name>Tibetian Mastiff</name>
+					<description>The Tibetan Mastiff is a large Tibetan dog breed. Originating with the nomadic cultures of Tibet, China, India, Mongolia and Nepal</description>
+					<price>100000.00</price>
+					<count>5</count>
+					<totalPrice>500000.00</totalPrice>
+				</item>
+			</items>
+		</invoice>
+		<invoice id="2" type="expense">
+			<payerID>1</payerID>
+			<recipientID>3</recipientID>
+			<issueDate>1944-03-25</issueDate>
+			<dueDate>1944-04-01</dueDate>
+			<totalPrice>1000.00</totalPrice>
+			<items>
+				<item>
+					<name>Vodka</name>
+					<description>Original Russian Vodka</description>
+					<price>200.00</price>
+					<count>5</count>
+					<totalPrice>1000.00</totalPrice>
+				</item>
+			</items>
+		</invoice>
+	</invoices>
+	<addressBook>
+		<person pid="1">
+			<name>User Name</name>
+			<email>user.name@mail.com</email>
+			<phone>+421 955 555 555</phone>
+			<address>
+				<streetAddress>Street ave. no. 7 </streetAddress>
+				<city>Idontknowwhere</city>
+				<country>Fakelandia</country>
+				<postalCode>798 N2D</postalCode>
+			</address>
+			<accountNumber>0123456789/4561</accountNumber>
+		</person>
+		<person pid="2">
+			<name>Fake Person</name>
+			<email>fake.person@mail.com</email>
+			<phone>+420 777 987 654</phone>
+			<address>
+				<streetAddress>WTF street 666</streetAddress>
+				<city>Macchu Picchu</city>
+				<country>Somewhere Middle 'Murica</country>
+				<postalCode>XXX XX</postalCode>
+			</address>
+			<accountNumber>48541-9998887776/0002</accountNumber>
+		</person>
+		<person pid="3">
+			<name>Joseph Stalin</name>
+			<email>stalin23@mail.com</email>
+			<phone>+555 555 555 555</phone>
+			<address>
+				<streetAddress>Cyka</streetAddress>
+				<city>Blyat</city>
+				<country>CCCP</country>
+				<postalCode>no way</postalCode>
+			</address>
+			<accountNumber>12-0000485624/1303</accountNumber>
+		</person>
+	</addressBook>
+</accounting>
