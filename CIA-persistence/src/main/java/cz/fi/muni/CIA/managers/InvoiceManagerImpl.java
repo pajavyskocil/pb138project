@@ -51,7 +51,7 @@ public class InvoiceManagerImpl implements InvoiceManager {
 			String xQuery = "let $accounting := doc('" + configuration.getAccountingResourceName() + "')" +
 					"return update insert element invoice { " +
 					"attribute id {'" + invoice.getId() + "'}, " +
-					"attribute type {'" + invoice.getInvoiceType().toString() + "'}, " +
+					"attribute type {'" + invoice.getInvoiceType().toString().toLowerCase() + "'}, " +
 					"element payerID {'" + invoice.getPayer().getId() + "'}, " +
 					"element recipientID {'" + invoice.getRecipient().getId() + "'}, " +
 					"element issueDate {'" + invoice.getIssueDate().toString() + "'}, " +
@@ -96,7 +96,7 @@ public class InvoiceManagerImpl implements InvoiceManager {
 			String xQuery = "let $accounting := doc('" + configuration.getAccountingResourceName() + "')" +
 					"return update replace $accounting//invoices/invoice[@id='" + invoice.getId() + "'] with element invoice { " +
 					"attribute id {'" + invoice.getId() + "'}, " +
-					"attribute type {'" + invoice.getInvoiceType().toString() + "'}, " +
+					"attribute type {'" + invoice.getInvoiceType().toString().toLowerCase() + "'}, " +
 					"element payerID {'" + invoice.getPayer().getId() + "'}, " +
 					"element recipientID {'" + invoice.getRecipient().getId() + "'}, " +
 					"element issueDate {'" + invoice.getIssueDate().toString() + "'}, " +

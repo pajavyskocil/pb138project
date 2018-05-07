@@ -28,9 +28,16 @@ import org.xmldb.api.modules.XMLResource;
 import org.xmldb.api.modules.XQueryService;
 
 
+import javax.xml.bind.ValidationException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -68,6 +75,13 @@ public class DbUtils {
 				logger.log(Level.WARNING, "The collection does not have resource with name " + configuration.getMetadataResourceName());
 				createMetadataResource(configuration, collection);
 			}
+
+			if (!validate(collection.getResource(configuration.getAccountingResourceName()).getContent().toString(), "CIA-persistence/src/main/resources/cia-schema.xsd")){
+				logger.log(Level.SEVERE, "Resource is not valid");
+				throw new ValidationException("Resource is not valid");
+			}
+			logger.log(Level.INFO, "Resource is valid");
+
 		} catch (ClassNotFoundException ex) {
 			logger.log(Level.SEVERE, "ClassNotFoundException during load collection: " + ex.getMessage());
 			throw new DatabaseException("Error during load collection");
@@ -80,6 +94,8 @@ public class DbUtils {
 		} catch (XMLDBException ex) {
 			logger.log(Level.SEVERE, "XMLDBException during load collection: " + ex.getMessage());
 			throw new DatabaseException("Error during load collection");
+		} catch (Exception ex) {
+
 		}
 		return collection;
 
@@ -338,5 +354,30 @@ public class DbUtils {
 		configuration.setMetadataResourceName(properties.getProperty("db_metadata_resourceName"));
 
 		return configuration;
+	}
+
+
+	private static boolean validate(String inputXml, String schemaLocation)
+			throws SAXException, IOException {
+		// build the schema
+		SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+		File schemaFile = new File(schemaLocation);
+		Schema schema = factory.newSchema(schemaFile);
+		Validator validator = schema.newValidator();
+
+		// create a source from a string
+		Source source = new StreamSource(new StringReader(inputXml));
+
+		// check input
+		boolean isValid = true;
+		try  {
+
+			validator.validate(source);
+		}
+		catch (SAXException e) {
+
+			isValid = false;
+		}
+		return isValid;
 	}
 }
