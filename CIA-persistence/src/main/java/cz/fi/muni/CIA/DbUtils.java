@@ -67,13 +67,14 @@ public class DbUtils {
 				logger.log(Level.WARNING, "Collection with name " + configuration.getDbCollectionName() + " does not exist");
 				collection = createCollection(configuration);
 			}
-			if (collection.getResource(configuration.getAccountingResourceName()) == null) {
-				logger.log(Level.WARNING, "The collection does not have resource with name " + configuration.getAccountingResourceName());
+			if (collection.getResource(configuration.getAccountingResourceName()) == null && collection.getResource(configuration.getMetadataResourceName()) == null) {
+				logger.log(Level.WARNING, "The collection does not have resources");
 				createAccountingResource(configuration, collection);
-			}
-			if (collection.getResource(configuration.getMetadataResourceName()) == null) {
-				logger.log(Level.WARNING, "The collection does not have resource with name " + configuration.getMetadataResourceName());
 				createMetadataResource(configuration, collection);
+
+			} else if (collection.getResource(configuration.getAccountingResourceName()) == null || collection.getResource(configuration.getMetadataResourceName()) == null) {
+				logger.log(Level.WARNING, "One of the resource is missing.");
+				throw new DatabaseException("One of the resource is missing.");
 			}
 
 			if (!validate(collection.getResource(configuration.getAccountingResourceName()).getContent().toString(), "CIA-persistence/src/main/resources/cia-schema.xsd")){
