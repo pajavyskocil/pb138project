@@ -1,8 +1,11 @@
 package cz.fi.muni.CIA.entities;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author Pavel Vyskocil <vyskocilpavel@muni.cz>
@@ -21,7 +24,7 @@ public class Invoice {
 
 	private Double price;
 
-	private HashMap<String, Integer> items = new HashMap<>();
+	private Set<Item> items = new HashSet<>();
 
 	private InvoiceType invoiceType;
 
@@ -76,12 +79,20 @@ public class Invoice {
 		this.price = price;
 	}
 
-	public HashMap<String, Integer> getItems() {
-		return items;
+	public Set<Item> getItems() {
+		return Collections.unmodifiableSet(items);
 	}
 
-	public void setItems(HashMap<String, Integer> items) {
+	public void setItems(Set<Item> items) {
 		this.items = items;
+	}
+
+	public void addItem(Item item) {
+		this.items.add(item);
+	}
+
+	public void removeItem(Item item) {
+		this.items.remove(item);
 	}
 
 	public InvoiceType getInvoiceType() {
