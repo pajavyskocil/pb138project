@@ -13,6 +13,7 @@ import org.xmldb.api.modules.XQueryService;
 import org.xmldb.api.base.Collection;
 
 
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,6 +22,7 @@ import java.util.logging.Logger;
 /**
  * @author Pavel Vyskocil <vyskocilpavel@muni.cz>
  */
+@Named
 public class PersonManagerImpl implements PersonManager {
 	private static final Logger logger = Logger.getLogger(PersonManagerImpl.class.getName());
 
