@@ -11,7 +11,7 @@ Team members:
 * Dominik František Bučík
 * Andrej Dravecký
 
-Wiki: https://github.com/LizzardCorp/pb138project/wiki
+[Project page](https://lizzardcorp.github.io/pb138project/)
 
 
 # Running the project
