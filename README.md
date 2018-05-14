@@ -1,6 +1,8 @@
 # PB138 team project - CIA
 Costs and incomes accounting
 
+[Project page](https://lizzardcorp.github.io/pb138project/)
+
 [![Build Status](https://travis-ci.org/LizzardCorp/pb138project.svg?branch=master)](https://travis-ci.org/LizzardCorp/pb138project)
 
 A Java school team project with native XML database.
@@ -10,9 +12,6 @@ Team members:
 * Pavel Vyskočil
 * Dominik František Bučík
 * Andrej Dravecký
-
-[Project page](https://lizzardcorp.github.io/pb138project/)
-
 
 # Running the project
 `git clone https://github.com/LizzardCorp/pb138project.git`
