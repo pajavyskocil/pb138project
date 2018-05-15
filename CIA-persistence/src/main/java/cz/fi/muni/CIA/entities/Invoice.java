@@ -126,8 +126,7 @@ public class Invoice {
 	@Override
 	public String toString() {
 		return "Invoice{" +
-				"id=" + id +
-				", payer=" + payer +
+				" payer=" + payer +
 				", recipient=" + recipient +
 				", issueDate=" + issueDate +
 				", dueDate=" + dueDate +

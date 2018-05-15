@@ -75,8 +75,7 @@ public class Person {
 		if (this == o) return true;
 		if (!(o instanceof Person)) return false;
 		Person person = (Person) o;
-		return Objects.equals(getId(), person.getId()) &&
-				Objects.equals(getName(), person.getName()) &&
+		return	Objects.equals(getName(), person.getName()) &&
 				Objects.equals(getEmail(), person.getEmail()) &&
 				Objects.equals(getPhoneNumber(), person.getPhoneNumber()) &&
 				Objects.equals(getAddress(), person.getAddress()) &&
@@ -86,14 +85,13 @@ public class Person {
 	@Override
 	public int hashCode() {
 
-		return Objects.hash(getId(), getName(), getEmail(), getPhoneNumber(), getAddress(), getAccountNumber());
+		return Objects.hash(getName(), getEmail(), getPhoneNumber(), getAddress(), getAccountNumber());
 	}
 
 	@Override
 	public String toString() {
 		return "Person{" +
-				"id=" + id +
-				", name='" + name + '\'' +
+				" name='" + name + '\'' +
 				", email='" + email + '\'' +
 				", phoneNumber='" + phoneNumber + '\'' +
 				", address=" + address +
