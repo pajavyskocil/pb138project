@@ -1,6 +1,7 @@
-package cz.muni.fi;
+package cz.muni.fi.controllers;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -8,12 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *
  * @author Dominik Frantisek Bucik <bucik@ics.muni.cz>
  */
-@Component
+@Controller
 public class LoginController {
 
     /* User has to choose which manager he/she wants to access */
-    @RequestMapping(value = "/transit")
-    public String showTransitScreen() {
+    @RequestMapping(value = "/start")
+    public String showTransitScreen(Model model) {
+        model.addAttribute("title", "Welcome");
+
         return "transit";
     }
 }

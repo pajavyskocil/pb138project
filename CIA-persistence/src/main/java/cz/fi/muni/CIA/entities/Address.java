@@ -83,4 +83,8 @@ public class Address {
 				", postCode='" + postCode + '\'' +
 				'}';
 	}
+
+	public String getPrettyAddress() {
+		return streetAddress + ", " + city + ", " + postCode + ", " + country;
+	}
 }

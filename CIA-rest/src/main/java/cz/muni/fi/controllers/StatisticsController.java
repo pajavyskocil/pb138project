@@ -1,4 +1,4 @@
-package cz.muni.fi;
+package cz.muni.fi.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +21,7 @@ public class StatisticsController {
 
     /* Entry point into manager */
     @RequestMapping(value = "/listStatistics", method = RequestMethod.GET)
-    public String listStatistics(Model model) {
+    public String listStatistics() {
         //TODO implement - get statistics from service
         return "listStatistics";
     }
