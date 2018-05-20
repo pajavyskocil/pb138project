@@ -32,7 +32,7 @@
             </div>
         </div>
     </c:if>
-    <form class="container details-form" method="POST" action="/app/<c:out value='${action}' />">
+    <form class="container details-form" method="POST" action="/accounting/<c:out value='${action}' />">
         <input type="hidden" name="id" value="<c:out value='${invoice.id}'/>"/>
         <h3 class="mb-3 text-center"><c:out value="${title}"/></h3>
         <div class="row mb-3 mb-2">
@@ -112,9 +112,9 @@
         <div class="row mb-3">
             <div class="col-md-11 row">
                 <div class="col-md-3">Name</div>
-                <div class="col-md-6">Description</div>
-                <div class="col-md-1">Count</div>
-                <div class="col-md-2">Price</div>
+                <div class="col-md-5">Description</div>
+                <div class="col-md-2">Count</div>
+                <div class="col-md-1">Price</div>
             </div>
             <div class="col-md-1"><!-- SPACER --></div>
         </div>
@@ -123,9 +123,9 @@
             <div class="row mb-3 item-record">
                 <div class="input-group col-md-11">
                     <input class="col-md-3 form-control" type="text" placeholder="Name" name="itemName[]" required>
-                    <input class="col-md-6 form-control" type="text" placeholder="Description" name="itemDesc[]" required>
-                    <input class="col-md-1 form-control" type="text" placeholder="Count" name="itemCount[]" required>
-                    <input class="col-md-1 form-control item-price" type="text" placeholder="Price" name="itemPrice[]" required>
+                    <input class="col-md-4 form-control" type="text" placeholder="Description" name="itemDesc[]" required>
+                    <input class="col-md-2 form-control item-count" type="number" min="1" placeholder="1" name="itemCount[]" required>
+                    <input class="col-md-2 form-control item-price" type="number" step=".01" min="0.01" placeholder="0.01" name="itemPrice[]" required>
                     <div class="col-md-1 no-padd input-group-append">
                         <span class="input-group-text">&euro;</span>
                     </div>
@@ -140,14 +140,14 @@
                 <div class="row mb-3 item-record">
                     <div class="input-group col-md-11">
                         <input class="col-md-3 form-control" type="text" placeholder="Name" name="itemName[]" value="<c:out value='${item.name}'/>" <c:out value='${inputItem}'/>>
-                        <input class="col-md-6 form-control" type="text" placeholder="Description" name="itemDesc[]" value="<c:out value='${item.description}'/>" <c:out value='${inputItem}'/>>
-                        <input class="col-md-1 form-control" type="text" placeholder="Count" name="itemCount[]" value="<c:out value='${item.count}'/>" <c:out value='${inputItem}'/>>
-                        <input class="col-md-1 form-control item-price" type="text" placeholder="Price" name="itemPrice[]" value="<c:out value='${item.price}'/>" <c:out value='${inputItem}'/>>
+                        <input class="col-md-4 form-control" type="text" placeholder="Description" name="itemDesc[]" value="<c:out value='${item.description}'/>" <c:out value='${inputItem}'/>>
+                        <input class="col-md-2 form-control item-count" type="number" min="1" placeholder="1" name="itemCount[]" value="<c:out value='${item.count}'/>" <c:out value='${inputItem}'/>>
+                        <input class="col-md-2 form-control item-price" type="number" step=".01" min="0.01" placeholder="0.01" name="itemPrice[]" value="<c:out value='${item.price}'/>" <c:out value='${inputItem}'/>>
                         <div class="col-md-1 no-padd input-group-append">
                             <span class="input-group-text">&euro;</span>
                         </div>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-1 btn-remove">
                         <span class="btn btn-danger btn-remove-item"><i class="fas fa-minus"></i></span>
                     </div>
                 </div>
@@ -166,8 +166,8 @@
             </div>
         </div>
         <div class="form-group row details-btns">
-            <input id="submit-form" type="submit" value="Confirm" class="col-md-3 offset-md-2 btn btn-success">
-            <a href="/app/invoices" class="col-md-3 offset-md-2 btn btn-light">Cancel</a>
+            <input id="submit-form" type="submit" value="Confirm" class="col-md-3 offset-md-2 btn btn-danger">
+            <a href="/accounting/invoices" class="col-md-3 offset-md-2 btn btn-light">Cancel</a>
         </div>
     </form>
 </div>

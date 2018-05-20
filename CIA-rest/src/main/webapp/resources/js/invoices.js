@@ -32,9 +32,9 @@ $('.more').click(function () {
             '<div class="row mb-3 item-record">' +
             '   <div class="input-group col-md-11">' +
             '       <input class="col-md-3 form-control" type="text" name="itemName[]" value="' + name + '" disabled>' +
-            '       <input class="col-md-6 form-control" type="text" name="itemDesc[]" value="' + desc + '" disabled>' +
-            '       <input class="col-md-1 form-control" type="text" name="itemCount[]" value="' + count + '" disabled>' +
-            '       <input class="col-md-1 form-control item-price" type="text" name="itemPrice[]" value="' + price + '" disabled>' +
+            '       <input class="col-md-4 form-control" type="text" name="itemDesc[]" value="' + desc + '" disabled>' +
+            '       <input class="col-md-2 form-control item-count" type="number" min="1" placeholder="1" type="text" name="itemCount[]" value="' + count + '" disabled>' +
+            '       <input class="col-md-2 form-control item-price" type="number" step=".01" min="0.01" placeholder="0.01" type="text" name="itemPrice[]" value="' + price + '" disabled>' +
             '       <div class="col-md-1 no-padd input-group-append">' +
             '           <span class="input-group-text">&euro;</span>' +
             '       </div>' +
@@ -65,16 +65,25 @@ $('#submit-delete').on('click', function() {
 
 function hideInput(container) {
     container.addClass('input-hdn');
-    console.log(container);
     $.each(container[0].getElementsByTagName('input'), function () {
-        this.removeAttribute('required');
+        this.required = false;
+        this.disabled = true;
+    });
+    $.each(container[0].getElementsByTagName('select'), function () {
+        this.required = false;
+        this.disabled = true;
     });
 }
 
 function showInput(container) {
     container.removeClass('input-hdn');
     $.each(container[0].getElementsByTagName('input'), function () {
-        this.setAttribute('required', 'required');
+        this.required = true;
+        this.disabled = false;
+    });
+    $.each(container[0].getElementsByTagName('select'), function () {
+        this.required = true;
+        this.disabled = false;
     });
 }
 
@@ -118,6 +127,10 @@ $('#list-type').change(function() {
             hideInput(inputListUser);
         }
     }
+});
+
+inputListOldest.change(function() {
+    inputListNewest.min = inputListOldest.val();
 });
 
 $('#list-type').val('all').change();

@@ -16,7 +16,7 @@
             </div>
         </div>
     </c:if>
-    <form method="get" action="/app/invoices" class="mb-3">
+    <form method="get" action="/accounting/invoices" class="mb-3">
         <div class="row mb-3">
             <div class="list-type-select-input input-group col-md-7">
                 <div class="input-group-prepend">
@@ -34,7 +34,7 @@
                     <input class="input-group-btn btn btn-warning" type="submit" value="Filter">
                 </div>
             </div>
-            <a href="/app/createInvoice" class="col-md-1 offset-md-4 btn btn-success"><i class="fas fa-plus"></i></a>
+            <a href="/accounting/createInvoice" class="col-md-1 offset-md-4 btn btn-success"><i class="fas fa-plus"></i></a>
         </div>
         <div class="row mb-4">
             <div id="listOldest" class="input-hdn col-md-3 mb-3">
@@ -64,7 +64,7 @@
                     </select>
                 </div>
             </div>
-            <div id="listPerson" class="input-hdn col-md-4 input-group">
+            <div id="listPerson" class="input-hdn col-md-4 input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Person</span>
                 </div>
@@ -85,9 +85,9 @@
                     <th>Payer</th>
                     <th>Recipient</th>
                     <th>Cost</th>
-                    <th class="w-100">Edit</th>
-                    <th class="w-100">Delete</th>
-                    <th class="w-100">Details</th>
+                    <th class="width-100 text-center">Edit</th>
+                    <th class="width-100 text-center">Delete</th>
+                    <th class="width-100 text-center">Details</th>
                 </tr>
             </thead>
             <tbody>
@@ -111,9 +111,9 @@
                     </td>
                     <td class="hidden issued"><c:out value="${invoice.issueDate}"/></td>
                     <td class="hidden due-to"><c:out value="${invoice.dueDate}"/></td>
-                    <td class="w-100 text-center"><a href="/app/editInvoice?id=<c:out value='${invoice.id}'/>"><i class="fas fa-edit"></i></a></td>
-                    <td class="w-100 text-center"><a href="/app/deleteInvoice?id=<c:out value='${invoice.id}'/>"><i class="fas fa-ban"></i></a></td>
-                    <td class="more w-100 text-center"><i class="fas fa-info"></i></td>
+                    <td class="width-100 text-center point"><a href="/accounting/editInvoice?id=<c:out value='${invoice.id}'/>"><i class="fas fa-edit"></i></a></td>
+                    <td class="width-100 text-center point"><a href="/accounting/deleteInvoice?id=<c:out value='${invoice.id}'/>"><i class="fas fa-ban"></i></a></td>
+                    <td class="more width-100 text-center point"><i class="fas fa-info"></i></td>
                 </tr>
             </c:forEach>
             </tbody>
@@ -125,7 +125,7 @@
     <form class="container details-form" method="GET" action="">
         <div class="row">
             <div class="col-md-1 offset-md-11">
-                <i id="details-close" class="fas fa-times"></i>
+                <i id="details-close" class="point fas fa-times"></i>
             </div>
         </div>
         <h3 id="details-header" class="mb-3 text-center"></h3>
@@ -160,8 +160,8 @@
         <div class="row mb-3">
             <div class="col-md-11 row">
                 <div class="col-md-3">Name</div>
-                <div class="col-md-6">Description</div>
-                <div class="col-md-1">Count</div>
+                <div class="col-md-4">Description</div>
+                <div class="col-md-2">Count</div>
                 <div class="col-md-2">Price</div>
             </div>
             <div class="col-md-1"><!-- SPACER --></div>
@@ -171,7 +171,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">Total</span>
                 </div>
-                <input id="price" class="form-control" type="text" name="price" disabled>
+                <input id="price" class="form-control" type="number" name="text" disabled>
             </div>
             <div class="col-md-6 input-group">
                 <div class="input-group-prepend">

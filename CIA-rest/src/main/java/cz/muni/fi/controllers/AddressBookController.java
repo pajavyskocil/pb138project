@@ -76,11 +76,11 @@ public class AddressBookController {
             person.setAddress(address);
             personService.createPerson(person);
             message = "Entry of person with name: " + person.getName() + " created!";
-            viewName = "redirect:/app/addressBook";
+            viewName = "redirect:/accounting/addressBook";
             sessionStatus.setComplete();
         } catch (Exception ex) {
             message = "Error has occurred when creating entry in database, please try again!";
-            viewName = "redirect:/app/personOperationFailed";
+            viewName = "redirect:/accounting/personOperationFailed";
             model.addAttribute("person", person);
             redirectAttributes.addFlashAttribute("action", "createPerson");
         }
@@ -98,11 +98,11 @@ public class AddressBookController {
             person.setAddress(address);
             personService.editPerson(person);
             message = "Entry of person with name: " + person.getName() + " edited!";
-            viewName = "redirect:/app/addressBook";
+            viewName = "redirect:/accounting/addressBook";
             sessionStatus.setComplete();
         } catch (Exception ex) {
             message = "Error has occurred when editing entry in database, please try again!";
-            viewName = "redirect:/app/personOperationFailed";
+            viewName = "redirect:/accounting/personOperationFailed";
             model.addAttribute("person", person);
             redirectAttributes.addFlashAttribute("action", "editPerson");
         }
@@ -119,11 +119,11 @@ public class AddressBookController {
         try {
             personService.deletePerson(person.getId());
             message = "Entry of person with name: " + person.getName() + " deleted!";
-            viewName = "redirect:/app/addressBook";
+            viewName = "redirect:/accounting/addressBook";
             sessionStatus.setComplete();
         } catch (Exception ex) {
             message = "Error has occurred when deleting entry in database, please try again!";
-            viewName = "redirect:/app/personOperationFailed";
+            viewName = "redirect:/accounting/personOperationFailed";
             model.addAttribute("person", person);
             redirectAttributes.addFlashAttribute("action", "deletePerson");
         }

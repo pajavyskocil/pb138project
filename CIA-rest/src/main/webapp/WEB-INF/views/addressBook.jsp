@@ -20,7 +20,7 @@
         <div class="searchbar-input col-md-4 offset-md-4">
             <input class="form-control" type="text" id="filter" placeholder="Filter records">
         </div>
-        <a href="/app/createPerson" class="col-md-1 offset-md-3 btn btn-success"><i class="fas fa-plus"></i></a>
+        <a href="/accounting/createPerson" class="col-md-1 offset-md-3 btn btn-success"><i class="fas fa-plus"></i></a>
     </div>
     <div class="row">
         <table class="table">
@@ -29,9 +29,9 @@
                     <th>Name</th>
                     <th>E-mail</th>
                     <th>Phone nr.</th>
-                    <th class="w-100">Edit</th>
-                    <th class="w-100">Delete</th>
-                    <th class="w-100">Details</th>
+                    <th class="width-100 text-center">Edit</th>
+                    <th class="width-100 text-center">Delete</th>
+                    <th class="width-100 text-center">Details</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,17 +47,17 @@
                     <td class="hidden city"><c:out value="${address.city}" /></td>
                     <td class="hidden zip"><c:out value="${address.postCode}" /></td>
                     <td class="hidden country"><c:out value="${address.country}" /></td>
-                    <td class="w-100 text-center">
-                        <a href="/app/editPerson?id=<c:out value='${person.id}'/>">
+                    <td class="width-100 text-center">
+                        <a href="/accounting/editPerson?id=<c:out value='${person.id}'/>">
                             <i class="fas fa-edit"></i>
                         </a>
                     </td>
-                    <td class="w-100 text-center">
-                        <a href="/app/deletePerson?id=<c:out value='${person.id}'/>">
+                    <td class="width-100 text-center">
+                        <a href="/accounting/deletePerson?id=<c:out value='${person.id}'/>">
                             <i class="fas fa-ban"></i>
                         </a>
                     </td>
-                    <td class="more w-100 text-center"><i class="fas fa-info"></i></td>
+                    <td class="more width-100 text-center"><i class="fas fa-info"></i></td>
                 </tr>
             </c:forEach>
             </tbody>
@@ -70,7 +70,7 @@
         <input id="id" type="hidden" name="id"/>
         <div class="row">
             <div class="col-md-1 offset-md-11">
-                <i id="details-close" class="fas fa-times"></i>
+                <i id="details-close" class="point fas fa-times"></i>
             </div>
         </div>
         <h3 class="mb-3 text-center" id="details-header"></h3>

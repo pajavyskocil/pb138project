@@ -95,7 +95,7 @@
         </div>
         <div class="form-group row details-btns">
             <input id="submit-edit" type="submit" value="Confirm" class="col-md-3 offset-md-2 btn btn-danger">
-            <a href="/app/addressBook" class="col-md-3 offset-md-2 btn btn-light">Cancel</a>
+            <a href="/accounting/addressBook" class="col-md-3 offset-md-2 btn btn-light">Cancel</a>
         </div>
     </form>
 </div>

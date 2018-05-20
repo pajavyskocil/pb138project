@@ -95,3 +95,15 @@ a:focus {
 .input-hdn {
 	display: none;
 }
+
+.width-100 {
+	width: 100px;
+}
+
+.width-50 {
+	width: 50px;
+}
+
+.point:hover {
+	cursor: pointer;
+}

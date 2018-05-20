@@ -7,9 +7,9 @@ $('#btn-add-item').on('click', function() {
         '<div class="row mb-3 item-record">' +
         '   <div class="input-group col-md-11">' +
         '       <input class="col-md-3 form-control" type="text" placeholder="Name" name="itemName[]" required>' +
-        '       <input class="col-md-6 form-control" type="text" placeholder="Description" name="itemDesc[]" required>' +
-        '       <input class="col-md-1 form-control" type="text" placeholder="Count" name="itemCount[]" required>' +
-        '       <input class="col-md-1 form-control item-price" type="text" placeholder="Price" name="itemPrice[]" required>' +
+        '       <input class="col-md-4 form-control" type="text" placeholder="Description" name="itemDesc[]" required>' +
+        '       <input class="col-md-2 form-control item-count" type="number" min="1" placeholder="1" name="itemCount[]" required>' +
+        '       <input class="col-md-2 form-control item-price" type="number" min="0.01" step="0.01" placeholder="0.01" name="itemPrice[]" required>' +
         '       <div class="col-md-1 no-padd input-group-append">' +
         '           <span class="input-group-text">&euro;</span>' +
         '       </div>' +
@@ -37,28 +37,55 @@ $(document).on('click', '.btn-remove-item', function() {
     $(last).removeClass('mb-2').addClass('mb-3');
 });
 
-$('#payer').change(function(){
-    var payer = $(this).val();
-    var buyer = $('#recipient').val();
-
-    if (payer === buyer) {
-        $('#pbalert').css('display','block');
-        $('#submit-form')[0].setAttribute('disabled', 'disabled');
-    } else {
-        $('#pbalert').css('display', 'none');
-        $('#submit-form')[0].removeAttribute('disabled');
-    }
+$(document).on('change', '.item-count', function () {
+    recalculate();
 });
 
-$('#recipient').change(function(){
-    var payer = $(this).val();
-    var buyer = $('#recipient').val();
+$(document).on('change', '.item-price', function () {
+    recalculate();
+});
 
-    if (payer === buyer) {
+function recalculate() {
+    var counts = $('.item-count');
+    var prices = $('.item-price');
+
+    var total = 0;
+    for (var i = 0; i < counts.length; i++) {
+        var plus = Number(counts[i].value) * Number(prices[i].value);
+        if (plus <= 0) {
+            total = 'error';
+            break;
+        }
+        total += plus;
+    }
+    $('#price').val(total);
+}
+
+function comparePayerAndRecipient(payer, recipient) {
+    if (payer === recipient) {
         $('#pbalert').css('display','block');
-        $('#submit-form')[0].setAttribute('disabled', 'disabled');
+        $('#submit-form')[0].disabled = true;
     } else {
         $('#pbalert').css('display', 'none');
-        $('#submit-form')[0].removeAttribute('disabled');
+        $('#submit-form')[0].disabled = false;
     }
+}
+
+$('#payer').change(function() {
+    var payer = $(this).val();
+    var recipient = $('#recipient').val();
+
+    comparePayerAndRecipient(payer, recipient);
 });
+
+$('#recipient').change(function() {
+    var recipient = $(this).val();
+    var payer = $('#payer').val();
+
+    comparePayerAndRecipient(payer, recipient);
+});
+
+if ($('form')[0].getAttribute('action') === '/accounting/createInvoice') {
+    $('#payer').val(0).change();
+    $('#recipient').val(0).change();
+}

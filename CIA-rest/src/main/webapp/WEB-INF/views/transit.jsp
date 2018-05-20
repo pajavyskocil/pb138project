@@ -6,19 +6,19 @@
 <div class="container">
     <div class="row align-mid">
         <div class="col-md-2 offset-md-2 ico-big">
-            <a href="/app/invoices">
+            <a href="/accounting/invoices">
                 <i class="fas fa-receipt"></i>
                 <span>Invoices</span>
             </a>
         </div>
         <div class="col-md-2 offset-md-1 ico-big">
-            <a href="/app/addressBook">
+            <a href="/accounting/addressBook">
                 <i class="fas fa-address-card"></i>
                 <span>Address Book</span>
             </a>
         </div>
         <div class="col-md-2 offset-md-1 ico-big">
-            <a href="/app/statistics">
+            <a href="/accounting/statistics">
                 <i class="fas fa-chart-pie"></i>
                 <span>Statistics</span>
             </a>
