@@ -13,13 +13,16 @@ Team members:
 * Dominik František Bučík
 * Andrej Dravecký
 
+# Prerequsities
+`Install eXistDB on your machine. Create user admin with password admin1. Create collection called accounting.`
+
 # Running the project
+`Run the eXistDB server on localhost`
+
 `git clone https://github.com/LizzardCorp/pb138project.git`
 
 `cd pb138project`
 
 `mvn clean install`
-
-`cd CIA-rest`
 
 `mvn jetty:run`
