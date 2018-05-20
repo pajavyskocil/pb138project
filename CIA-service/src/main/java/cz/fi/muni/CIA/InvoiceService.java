@@ -96,4 +96,12 @@ public interface InvoiceService {
 	 * @return List of Invoice entities
 	 */
 	List<Invoice> getInvoicesByType(InvoiceType type);
+
+	/**
+	 * Get all Invoice entities of person (person can be both payer and recipient)
+	 *
+	 * @param personId of Person
+	 * @return List of Invoice entities
+	 */
+	List<Invoice> getInvoicesByPerson(Long personId);
 }

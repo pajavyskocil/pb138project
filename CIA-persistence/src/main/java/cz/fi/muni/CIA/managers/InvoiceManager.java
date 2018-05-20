@@ -23,4 +23,6 @@ public interface InvoiceManager {
 
 	List<Invoice> getAllExpenses();
 
+	List<Invoice> getAllForPerson(Long personId);
+
 }

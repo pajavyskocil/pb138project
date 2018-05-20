@@ -38,7 +38,7 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>9.3.23.v20180228</version>
                 <configuration>
-                    <war>${project.basedir}/CIA-rest/target/AccountingWEB-XML.war</war>
+                    <war>${project.basedir}/CIA-rest/target/webapp.war</war>
                     <httpConnector>
                         <port>8082</port>
                     </httpConnector>

@@ -63,6 +63,7 @@ public class InvoiceManagerImpl implements InvoiceManager {
 					"} into $accounting//invoices";
 			XQueryService service = (XQueryService) collection.getService("XQueryService", "1.0");
 			service.setProperty("indent", "yes");
+			service.setProperty("encoding", "UTF-8");
 			CompiledExpression compiled = service.compile(xQuery);
 
 			service.execute(compiled);
@@ -80,6 +81,7 @@ public class InvoiceManagerImpl implements InvoiceManager {
 					"return update delete $accounting//invoices/invoice[@id='" + id + "']";
 			XQueryService service = (XQueryService) collection.getService("XQueryService", "1.0");
 			service.setProperty("indent", "yes");
+			service.setProperty("encoding", "UTF-8");
 			CompiledExpression compiled = service.compile(xQuery);
 
 			service.execute(compiled);
@@ -107,6 +109,7 @@ public class InvoiceManagerImpl implements InvoiceManager {
 					"element items {" + itemsQuery + "}}";
 			XQueryService service = (XQueryService) collection.getService("XQueryService", "1.0");
 			service.setProperty("indent", "yes");
+			service.setProperty("encoding", "UTF-8");
 			CompiledExpression compiled = service.compile(xQuery);
 
 			service.execute(compiled);
@@ -124,6 +127,7 @@ public class InvoiceManagerImpl implements InvoiceManager {
 					"return $invoiceList//invoice[@id='" + id + "']";
 			XQueryService service = (XQueryService) collection.getService("XQueryService", "1.0");
 			service.setProperty("indent", "yes");
+			service.setProperty("encoding", "UTF-8");
 			CompiledExpression compiledExpression = service.compile(xQuery);
 			ResourceSet resourceSet = service.execute(compiledExpression);
 			ResourceIterator resourceIterator = resourceSet.getIterator();
@@ -144,6 +148,7 @@ public class InvoiceManagerImpl implements InvoiceManager {
 					"return $invoiceList//invoice";
 			XQueryService service = (XQueryService) collection.getService("XQueryService", "1.0");
 			service.setProperty("indent", "yes");
+			service.setProperty("encoding", "UTF-8");
 			CompiledExpression compiledExpression = service.compile(xQuery);
 			ResourceSet resourceSet = service.execute(compiledExpression);
 			ResourceIterator resourceIterator = resourceSet.getIterator();
@@ -174,9 +179,10 @@ public class InvoiceManagerImpl implements InvoiceManager {
 		List<Invoice> invoiceList = new ArrayList<>();
 		try{
 			String xQuery = "let $invoiceList := doc('" + configuration.getAccountingResourceName() + "')" +
-					"return $invoiceList//invoice[@type='" + type.toString() + "']";
+					"return $invoiceList//invoice[@type='" + type.toString().toLowerCase() + "']";
 			XQueryService service = (XQueryService) collection.getService("XQueryService", "1.0");
 			service.setProperty("indent", "yes");
+			service.setProperty("encoding", "UTF-8");
 			CompiledExpression compiledExpression = service.compile(xQuery);
 			ResourceSet resourceSet = service.execute(compiledExpression);
 			ResourceIterator resourceIterator = resourceSet.getIterator();
@@ -188,6 +194,31 @@ public class InvoiceManagerImpl implements InvoiceManager {
 		} catch (XMLDBException ex) {
 			logger.log(Level.SEVERE, "XMLDBException during get all invoices in type: "+ type + " " + ex.getMessage());
 			throw new InvoiceException("Error during get all invoices in type: " + type);
+		}
+		return invoiceList;
+	}
+
+	@Override
+	public List<Invoice> getAllForPerson(Long personId) {
+		logger.log(Level.INFO, "Getting all invoices with person as payer or recipient: " + personId);
+		List<Invoice> invoiceList = new ArrayList<>();
+		try{
+			String xQuery = "let $invoiceList := doc('" + configuration.getAccountingResourceName() + "')" +
+					"return $invoiceList//invoice[payerID='" + personId + "' or recipientID=' " + personId + "']";
+			XQueryService service = (XQueryService) collection.getService("XQueryService", "1.0");
+			service.setProperty("indent", "yes");
+			service.setProperty("encoding", "UTF-8");
+			CompiledExpression compiledExpression = service.compile(xQuery);
+			ResourceSet resourceSet = service.execute(compiledExpression);
+			ResourceIterator resourceIterator = resourceSet.getIterator();
+
+			while (resourceIterator.hasMoreResources()) {
+				Resource resource = resourceIterator.nextResource();
+				invoiceList.add(DbUtils.invoiceXMLToInvoice(collection, resource.getContent().toString()));
+			}
+		} catch (XMLDBException ex) {
+			logger.log(Level.SEVERE, "XMLDBException during get all invoices for person: "+ personId + " " + ex.getMessage());
+			throw new InvoiceException("Error during get all invoices for person: " + personId);
 		}
 		return invoiceList;
 	}
