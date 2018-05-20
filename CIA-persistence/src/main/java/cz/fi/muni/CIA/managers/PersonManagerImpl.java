@@ -59,6 +59,7 @@ public class PersonManagerImpl implements PersonManager {
 					"} into $accounting//addressBook";
 			XQueryService service = (XQueryService) collection.getService("XQueryService", "1.0");
 			service.setProperty("indent", "yes");
+			service.setProperty("encoding", "UTF-8");
 			CompiledExpression compiled = service.compile(xQuery);
 
 			service.execute(compiled);
@@ -89,6 +90,7 @@ public class PersonManagerImpl implements PersonManager {
 			System.out.println(xQuery);
 			XQueryService service = (XQueryService) collection.getService("XQueryService", "1.0");
 			service.setProperty("indent", "yes");
+			service.setProperty("encoding", "UTF-8");
 			CompiledExpression compiled = service.compile(xQuery);
 
 			service.execute(compiled);
@@ -125,6 +127,7 @@ public class PersonManagerImpl implements PersonManager {
 					"return $personList//person[@pid='" + id + "']";
 			XQueryService service = (XQueryService) collection.getService("XQueryService", "1.0");
 			service.setProperty("indent", "yes");
+			service.setProperty("encoding", "UTF-8");
 			CompiledExpression compiledExpression = service.compile(xQuery);
 			ResourceSet resourceSet = service.execute(compiledExpression);
 			ResourceIterator resourceIterator = resourceSet.getIterator();
@@ -145,6 +148,7 @@ public class PersonManagerImpl implements PersonManager {
 					"return $personList//person";
 			XQueryService service = (XQueryService) collection.getService("XQueryService", "1.0");
 			service.setProperty("indent", "yes");
+			service.setProperty("encoding", "UTF-8");
 			CompiledExpression compiledExpression = service.compile(xQuery);
 
 			ResourceSet resourceSet = service.execute(compiledExpression);

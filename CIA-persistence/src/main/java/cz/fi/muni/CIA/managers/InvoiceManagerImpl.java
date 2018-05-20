@@ -63,6 +63,7 @@ public class InvoiceManagerImpl implements InvoiceManager {
 					"} into $accounting//invoices";
 			XQueryService service = (XQueryService) collection.getService("XQueryService", "1.0");
 			service.setProperty("indent", "yes");
+			service.setProperty("encoding", "UTF-8");
 			CompiledExpression compiled = service.compile(xQuery);
 
 			service.execute(compiled);
@@ -107,6 +108,7 @@ public class InvoiceManagerImpl implements InvoiceManager {
 					"element items {" + itemsQuery + "}}";
 			XQueryService service = (XQueryService) collection.getService("XQueryService", "1.0");
 			service.setProperty("indent", "yes");
+			service.setProperty("encoding", "UTF-8");
 			CompiledExpression compiled = service.compile(xQuery);
 
 			service.execute(compiled);
@@ -124,6 +126,7 @@ public class InvoiceManagerImpl implements InvoiceManager {
 					"return $invoiceList//invoice[@id='" + id + "']";
 			XQueryService service = (XQueryService) collection.getService("XQueryService", "1.0");
 			service.setProperty("indent", "yes");
+			service.setProperty("encoding", "UTF-8");
 			CompiledExpression compiledExpression = service.compile(xQuery);
 			ResourceSet resourceSet = service.execute(compiledExpression);
 			ResourceIterator resourceIterator = resourceSet.getIterator();
@@ -144,6 +147,7 @@ public class InvoiceManagerImpl implements InvoiceManager {
 					"return $invoiceList//invoice";
 			XQueryService service = (XQueryService) collection.getService("XQueryService", "1.0");
 			service.setProperty("indent", "yes");
+			service.setProperty("encoding", "UTF-8");
 			CompiledExpression compiledExpression = service.compile(xQuery);
 			ResourceSet resourceSet = service.execute(compiledExpression);
 			ResourceIterator resourceIterator = resourceSet.getIterator();
@@ -177,6 +181,7 @@ public class InvoiceManagerImpl implements InvoiceManager {
 					"return $invoiceList//invoice[@type='" + type.toString() + "']";
 			XQueryService service = (XQueryService) collection.getService("XQueryService", "1.0");
 			service.setProperty("indent", "yes");
+			service.setProperty("encoding", "UTF-8");
 			CompiledExpression compiledExpression = service.compile(xQuery);
 			ResourceSet resourceSet = service.execute(compiledExpression);
 			ResourceIterator resourceIterator = resourceSet.getIterator();
