@@ -16,10 +16,12 @@ import java.util.List;
 public class PersonServiceImpl implements PersonService {
 
 	private final PersonManager personManager;
+	private final InvoiceService invoiceService;
 
 	@Inject
-	public PersonServiceImpl(PersonManager personManager) {
+	public PersonServiceImpl(PersonManager personManager, InvoiceService invoiceService) {
 		this.personManager = personManager;
+		this.invoiceService = invoiceService;
 	}
 
 	public void createPerson(Person person) {
@@ -36,6 +38,7 @@ public class PersonServiceImpl implements PersonService {
 
 	public void deletePerson(Long id) {
 		idCheck(id);
+		if (!invoiceService.getInvoicesByPersonId(id).isEmpty()) throw new IllegalArgumentException("It's not possible to delete person who is figuring in som invoice!");
 		personManager.deletePerson(id);
 	}
 
@@ -48,7 +51,7 @@ public class PersonServiceImpl implements PersonService {
 		return personManager.getAll();
 	}
 
-	public void personCheck(Person person) {
+	private void personCheck(Person person) {
 		if (person.getName() == null) throw new IllegalArgumentException("Person name cannot be null!");
 		if (person.getEmail() == null) throw new IllegalArgumentException("Person email cannot be null!");
 		if (person.getAccountNumber() == null) throw new IllegalArgumentException("Person account number cannot be null!");
@@ -60,7 +63,7 @@ public class PersonServiceImpl implements PersonService {
 		if (person.getAddress().getStreetAddress() == null) throw new IllegalArgumentException("Person street address cannot be null!");
 	}
 
-	public void idCheck(Long id) {
+	private void idCheck(Long id) {
 		if (id == null) throw new IllegalArgumentException("Id cannot be null!");
 		if (id < 0) throw new IllegalArgumentException("Id cannot be less than zero!");
 	}

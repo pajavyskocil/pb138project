@@ -2,12 +2,14 @@ package cz.fi.muni.CIA;
 
 import cz.fi.muni.CIA.entities.Address;
 import cz.fi.muni.CIA.entities.Person;
+import cz.fi.muni.CIA.managers.InvoiceManager;
 import cz.fi.muni.CIA.managers.PersonManager;
 import org.testng.annotations.Test;
 import org.mockito.InjectMocks;
 import org.testng.annotations.BeforeMethod;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -19,6 +21,7 @@ import static org.mockito.Mockito.verify;
 public class PersonServiceUnitTest {
 
 	private PersonManager personManager = mock(PersonManager.class);
+	private InvoiceService invoiceService = mock(InvoiceService.class);
 
 	@InjectMocks
 	private PersonService personService;
@@ -29,7 +32,9 @@ public class PersonServiceUnitTest {
 
 	@BeforeMethod
 	public void setService() {
-		personService = new PersonServiceImpl(personManager);
+		reset(personManager);
+		reset(invoiceService);
+		personService = new PersonServiceImpl(personManager, invoiceService);
 	}
 
 	@BeforeMethod
@@ -83,6 +88,7 @@ public class PersonServiceUnitTest {
 	public void testDeletePerson() {
 		personService.deletePerson(1L);
 
+		verify(invoiceService, times(1)).getInvoicesByPersonId(1L);
 		verify(personManager, times(1)).deletePerson(1L);
 	}
 
