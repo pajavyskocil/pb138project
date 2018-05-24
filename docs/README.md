@@ -4,9 +4,9 @@
 * [Mgr. Luděk Bártek, Ph.D.](https://github.com/ludekbartek) učo 2154
 
 ## Developers
+* [Pavel Vyskočil](https://github.com/pajavyskocil)      učo 445753 - Team leader, data layer
 * [Bc. Peter Balčirák](https://github.com/balcirakpeter) učo 422570 - Service layer
 * [Dominik František Bučík](https://github.com/dBucik)   učo 445348 - Web UI
-* [Pavel Vyskočil](https://github.com/pajavyskocil)      učo 445753 - Data layer
 * [Andrej Dravecký](https://github.com/P1R0H)            učo 445432 - Data layer, generating PDF
 
 ## Project assignment
@@ -44,21 +44,21 @@ Students will design and create a web app on the Java EE platform for revenue an
 ## Basic scheme
 
 ### Use case diagram
-![Use Case diagram](https://github.com/LizzardCorp/pb138project/blob/master/docs/diagrams/useCaseDiagram.jpg?raw=true)
+![Use Case diagram](https://github.com/LizzardCorp/pb138project/blob/master/docs/diagrams/useCaseDiagram.png?raw=true)
 
 ### Class diagram
-![Class diagram](https://github.com/LizzardCorp/pb138project/blob/master/docs/diagrams/classDiagram.jpg?raw=true)
+![Class diagram](https://github.com/LizzardCorp/pb138project/blob/master/docs/diagrams/classDiagram.png?raw=true)
+
+## Prerequsities
+`Install eXistDB on your machine. Create user admin with password admin1. Create collection called accounting.`
 
 ## Running the project
-
-Note that this project is under development and its not fully operationall!!
+`Run the eXistDB server on localhost`
 
 `git clone https://github.com/LizzardCorp/pb138project.git`
 
 `cd pb138project`
 
 `mvn clean install`
-
-`cd CIA-rest`
 
 `mvn jetty:run`
