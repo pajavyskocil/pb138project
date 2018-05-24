@@ -44,10 +44,10 @@ Students will design and create a web app on the Java EE platform for revenue an
 ## Basic scheme
 
 ### Use case diagram
-![Use Case diagram](https://github.com/LizzardCorp/pb138project/blob/master/docs/diagrams/useCaseDiagram.png?raw=true)
+![Use Case diagram](https://github.com/LizzardCorp/pb138project/blob/master/docs/diagrams/useCaseDiagram.png)
 
 ### Class diagram
-![Class diagram](https://github.com/LizzardCorp/pb138project/blob/master/docs/diagrams/classDiagram.png?raw=true)
+![Class diagram](https://github.com/LizzardCorp/pb138project/blob/master/docs/diagrams/classDiagram.png)
 
 ## Prerequsities
 `Install eXistDB on your machine. Create user admin with password admin1. Create collection called accounting.`
