@@ -15,6 +15,7 @@ import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XQueryService;
 
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +25,7 @@ import java.util.logging.Logger;
 /**
  * @author Pavel Vyskocil <vyskocilpavel@muni.cz>
  */
+@Named
 public class InvoiceManagerImpl implements InvoiceManager {
 
 	private static final Logger logger = Logger.getLogger(InvoiceManagerImpl.class.getName());
