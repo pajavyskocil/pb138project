@@ -12,7 +12,7 @@
     <parent>
         <groupId>io.spring.platform</groupId>
         <artifactId>platform-bom</artifactId>
-        <version>Brussels-SR5</version>
+        <version>Brussels-SR6</version>
         <relativePath/>
     </parent>
 
@@ -28,8 +28,22 @@
     <modules>
         <module>CIA-persistence</module>
         <module>CIA-service</module>
-        <module>CIA-api</module>
         <module>CIA-rest</module>
-        <module>CIA-gui</module>
     </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.3.23.v20180228</version>
+                <configuration>
+                    <war>${project.basedir}/CIA-rest/target/webapp.war</war>
+                    <httpConnector>
+                        <port>8082</port>
+                    </httpConnector>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
