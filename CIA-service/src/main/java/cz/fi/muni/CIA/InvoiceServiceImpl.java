@@ -57,6 +57,13 @@ public class InvoiceServiceImpl implements InvoiceService {
 	}
 
 	@Override
+	public List<Invoice> getInvoicesByPersonId(Long personId) {
+		idCheck(personId);
+		List<Invoice> allInvoices = getAllInvoices();
+		return selectInvoicesByPersonId(personId, allInvoices);
+	}
+
+	@Override
 	public List<Invoice> getInvoicesByPersonIdAndTypeAndDate(LocalDate oldest, LocalDate newest, Long personId, InvoiceType type) {
 		idCheck(personId);
 
