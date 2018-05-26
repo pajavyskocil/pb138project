@@ -19,6 +19,9 @@ public class Person {
 
 	private String accountNumber;
 
+	private String xmlRepresentation;
+
+
 	public Person() {
 	}
 
@@ -68,6 +71,14 @@ public class Person {
 
 	public void setAccountNumber(String accountNumber) {
 		this.accountNumber = accountNumber;
+	}
+
+	public String getXmlRepresentation() {
+		return xmlRepresentation;
+	}
+
+	public void setXmlRepresentation(String xmlRepresentation) {
+		this.xmlRepresentation = xmlRepresentation;
 	}
 
 	@Override

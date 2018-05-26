@@ -28,6 +28,8 @@ public class Invoice {
 
 	private InvoiceType invoiceType;
 
+	private String xmlRepresentation;
+
 	public Invoice() {
 	}
 
@@ -102,6 +104,15 @@ public class Invoice {
 	public void setInvoiceType(InvoiceType invoiceType) {
 		this.invoiceType = invoiceType;
 	}
+
+	public String getXmlRepresentation() {
+		return xmlRepresentation;
+	}
+
+	public void setXmlRepresentation(String xmlRepresentation) {
+		this.xmlRepresentation = xmlRepresentation;
+	}
+
 
 	@Override
 	public boolean equals(Object o) {
