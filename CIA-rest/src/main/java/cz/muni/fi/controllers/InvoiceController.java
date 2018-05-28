@@ -1,6 +1,7 @@
 package cz.muni.fi.controllers;
 
 import cz.fi.muni.CIA.InvoiceService;
+import cz.fi.muni.CIA.OwnerService;
 import cz.fi.muni.CIA.PersonService;
 import cz.fi.muni.CIA.entities.Invoice;
 import cz.fi.muni.CIA.entities.InvoiceType;
@@ -37,6 +38,9 @@ public class InvoiceController {
 
     @Autowired
     private PersonService personService;
+
+    @Autowired
+    private OwnerService ownerService;
 
     /* Entry point into manager */
     @RequestMapping(value = "/invoices", method = RequestMethod.GET)
@@ -173,8 +177,7 @@ public class InvoiceController {
                              @RequestParam(value="itemCount[]") int[] itemCount,
                              @RequestParam(value="itemPrice[]") double[] itemPricePerUnit,
                              @RequestParam(value="itemDesc[]") String[] itemDescription,
-                             @RequestParam Long payerId,
-                             @RequestParam Long recipientId,
+                             @RequestParam Long personId,
                              @RequestParam String type,
                              @RequestParam("dueTo") @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate dueDate,
                              RedirectAttributes redirectAttributes, SessionStatus sessionStatus)
@@ -183,7 +186,7 @@ public class InvoiceController {
 
         try {
             setInvoiceItemsAndTotal(invoice, itemName, itemDescription, itemCount, itemPricePerUnit);
-            setInvoiceAttrs(invoice, LocalDate.now(), dueDate, payerId, recipientId, type);
+            setInvoiceAttrs(invoice, LocalDate.now(), dueDate, personId, type);
 
             invoiceService.createInvoice(invoice);
             message = "Entry of invoice with id: " + invoice.getId() + " created!";
@@ -210,8 +213,7 @@ public class InvoiceController {
                               @RequestParam(value="itemCount[]") int[] itemCount,
                               @RequestParam(value="itemPrice[]") double[] itemPricePerUnit,
                               @RequestParam(value="itemDesc[]") String[] itemDescription,
-                              @RequestParam Long payerId,
-                              @RequestParam Long recipientId,
+                              @RequestParam Long personId,
                               @RequestParam String type,
                               @RequestParam("dueTo") @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate dueDate,
                               RedirectAttributes redirectAttributes, SessionStatus sessionStatus)
@@ -220,7 +222,7 @@ public class InvoiceController {
 
         try {
             setInvoiceItemsAndTotal(invoice, itemName, itemDescription, itemCount, itemPricePerUnit);
-            setInvoiceAttrs(invoice, LocalDate.now(), dueDate, payerId, recipientId, type);
+            setInvoiceAttrs(invoice, LocalDate.now(), dueDate, personId, type);
 
             invoiceService.editInvoice(invoice);
             message = "Entry of invoice with id: " + invoice.getId() + " edited!";
@@ -284,12 +286,17 @@ public class InvoiceController {
         invoice.setPrice(total);
     }
 
-    private void setInvoiceAttrs(Invoice invoice, LocalDate issuedDate, LocalDate dueDate, Long payerId,
-                                 Long recipientId, String type) {
+    private void setInvoiceAttrs(Invoice invoice, LocalDate issuedDate, LocalDate dueDate, Long personId,
+                                 String type) {
         invoice.setIssueDate(issuedDate);
         invoice.setDueDate(dueDate);
-        invoice.setPayer(personService.getPersonById(payerId));
-        invoice.setRecipient(personService.getPersonById(recipientId));
         invoice.setInvoiceType((type.equalsIgnoreCase("expense")? InvoiceType.EXPENSE : InvoiceType.INCOME));
+        if (invoice.getInvoiceType().equals(InvoiceType.INCOME)) {
+            invoice.setPayer(personService.getPersonById(personId));
+            invoice.setRecipient(ownerService.getOwner());
+        } else {
+            invoice.setRecipient(personService.getPersonById(personId));
+            invoice.setPayer(ownerService.getOwner());
+        }
     }
 }

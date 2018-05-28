@@ -35,7 +35,7 @@ public class StatisticsController {
     /* Request to generate PDF from the displayed statistics */
     @RequestMapping(value = "/generatePdf", method = RequestMethod.POST)
     public String generatePdf(RedirectAttributes redirectAttributes, SessionStatus sessionStatus) {
-            //TODO implement - generate pd
+            //TODO implement - generate pdf
 
             //addressBookService.edit(person);
             return  "redirect:/showAddressBook";
