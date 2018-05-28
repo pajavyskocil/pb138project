@@ -1,9 +1,6 @@
 package cz.fi.muni.CIA;
 
-import cz.fi.muni.CIA.managers.InvoiceManager;
-import cz.fi.muni.CIA.managers.InvoiceManagerImpl;
-import cz.fi.muni.CIA.managers.PersonManager;
-import cz.fi.muni.CIA.managers.PersonManagerImpl;
+import cz.fi.muni.CIA.managers.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -32,4 +29,7 @@ public class PersistenceApplicationContext {
 	public InvoiceManager invoiceManager() {
 		return new InvoiceManagerImpl(dataSource());
 	}
+
+	@Bean
+	public OwnerManager ownerManager() { return new OwnerManagerImpl(dataSource()); }
 }
