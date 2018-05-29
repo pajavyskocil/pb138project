@@ -32,7 +32,7 @@ public class LoginController {
     @RequestMapping(value = "/")
     public String showHomeScreen(Model model) {
         model.addAttribute("hasOwner", ownerService.getOwner() != null);
-        model.addAttribute("title", "Welcome");
+        model.addAttribute("title", "Accounting");
 
         return "home";
     }

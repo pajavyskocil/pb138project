@@ -2,6 +2,8 @@ package cz.fi.muni.CIA;
 
 import cz.fi.muni.CIA.Exceptions.*;
 import cz.fi.muni.CIA.entities.*;
+import cz.fi.muni.CIA.managers.OwnerManager;
+import cz.fi.muni.CIA.managers.OwnerManagerImpl;
 import cz.fi.muni.CIA.managers.PersonManager;
 import cz.fi.muni.CIA.managers.PersonManagerImpl;
 import org.w3c.dom.Document;
@@ -301,6 +303,7 @@ public class DbUtils {
 	public static Invoice invoiceXMLToInvoice(Collection collection, String invoiceXML) {
 		Invoice invoice = new Invoice();
 		PersonManager personManager = new PersonManagerImpl(collection);
+		OwnerManager ownerManager = new OwnerManagerImpl(collection);
 		DocumentBuilder documentBuilder;
 		try {
 			documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -313,13 +316,13 @@ public class DbUtils {
 
 			if (element.getAttribute("type").equals(InvoiceType.INCOME.toString())) {
 				invoice.setInvoiceType(InvoiceType.INCOME);
+				invoice.setPayer(personManager.findById(Long.parseLong(element.getElementsByTagName("payerID").item(0).getTextContent())));
+				invoice.setRecipient(ownerManager.getOwner());
 			} else {
 				invoice.setInvoiceType(InvoiceType.EXPENSE);
+				invoice.setRecipient(personManager.findById(Long.parseLong(element.getElementsByTagName("recipientID").item(0).getTextContent())));
+				invoice.setPayer(ownerManager.getOwner());
 			}
-
-			invoice.setPayer(personManager.findById(Long.parseLong(element.getElementsByTagName("payerID").item(0).getTextContent())));
-
-			invoice.setRecipient(personManager.findById(Long.parseLong(element.getElementsByTagName("recipientID").item(0).getTextContent())));
 
 			invoice.setIssueDate(LocalDate.parse(element.getElementsByTagName("issueDate").item(0).getTextContent()));
 
@@ -383,6 +386,7 @@ public class DbUtils {
 				throw new ConfigException("Cannot load config file.");
 			}
 		}
+
 		configuration.setDbUserName(properties.getProperty("db_user_name"));
 		configuration.setDbUserPassword(properties.getProperty("db_user_password"));
 		configuration.setDbPrefix(properties.getProperty("db_prefix"));
@@ -409,13 +413,13 @@ public class DbUtils {
 		// check input
 		boolean isValid = true;
 		try  {
-
 			validator.validate(source);
 		}
 		catch (SAXException e) {
 
 			isValid = false;
 		}
+
 		return isValid;
 	}
 }

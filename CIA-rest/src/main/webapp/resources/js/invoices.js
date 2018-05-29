@@ -7,8 +7,7 @@ $('.more').click(function () {
     $('#details').css('display', 'block');
     var row = $(this).parent()[0];
     var id = row.getElementsByClassName('id')[0].textContent;
-    var payer = row.getElementsByClassName('payer')[0].textContent;
-    var recipient = row.getElementsByClassName('recipient')[0].textContent;
+    var secondPerson = row.getElementsByClassName('secondPerson')[0].textContent;
     var issued = row.getElementsByClassName('issued')[0].textContent;
     var dueTo = row.getElementsByClassName('due-to')[0].textContent;
     var price = row.getElementsByClassName('price')[0].textContent;
@@ -16,8 +15,8 @@ $('.more').click(function () {
     var items = row.getElementsByClassName('item');
 
     $('#details-header')[0].textContent = 'Invoice #' + id;
-    $('#payer')[0].setAttribute('value', payer);
-    $('#recipient')[0].setAttribute('value', recipient);
+    $('#id')[0].setAttribute('value', id);
+    $('#secondPerson')[0].setAttribute('value', secondPerson);
     $('#issued')[0].setAttribute('value', issued);
     $('#dueTo')[0].setAttribute('value', dueTo);
     $('#price')[0].setAttribute('value', price);
@@ -27,14 +26,14 @@ $('.more').click(function () {
         var name = items[i].getElementsByClassName('item-name')[0].textContent;
         var desc = items[i].getElementsByClassName('item-desc')[0].textContent;
         var count = items[i].getElementsByClassName('item-count')[0].textContent;
-        var price = items[i].getElementsByClassName('item-price')[0].textContent;
+        var itemPrice = items[i].getElementsByClassName('item-price')[0].textContent;
         var newNodes = $.parseHTML(
             '<div class="row mb-3 item-record">' +
             '   <div class="input-group col-md-11">' +
             '       <input class="col-md-3 form-control" type="text" name="itemName[]" value="' + name + '" disabled>' +
             '       <input class="col-md-4 form-control" type="text" name="itemDesc[]" value="' + desc + '" disabled>' +
             '       <input class="col-md-2 form-control item-count" type="number" min="1" placeholder="1" type="text" name="itemCount[]" value="' + count + '" disabled>' +
-            '       <input class="col-md-2 form-control item-price" type="number" step=".01" min="0.01" placeholder="0.01" type="text" name="itemPrice[]" value="' + price + '" disabled>' +
+            '       <input class="col-md-2 form-control item-price" type="number" step=".01" min="0.01" placeholder="0.01" type="text" name="itemPrice[]" value="' + itemPrice + '" disabled>' +
             '       <div class="col-md-1 no-padd input-group-append">' +
             '           <span class="input-group-text">&euro;</span>' +
             '       </div>' +
@@ -53,13 +52,13 @@ $('#details-close').on('click', function() {
 
 $('#submit-edit').on('click', function() {
     var id = $('#details #id')[0].getAttribute('value');
-    $('.details-form')[0].setAttribute('action', '/app/editInvoice?id=' + id);
+    $('.details-form')[0].setAttribute('action', '/accounting/editInvoice?id=' + id);
     $('.details-form')[0].submit();
 });
 
 $('#submit-delete').on('click', function() {
     var id = $('#details #id')[0].getAttribute('value');
-    $('.details-form')[0].setAttribute('action', '/app/deleteInvoice?id=' + id);
+    $('.details-form')[0].setAttribute('action', '/accounting/deleteInvoice?id=' + id);
     $('.details-form')[0].submit();
 });
 
@@ -103,6 +102,12 @@ $('#list-type').change(function() {
             hideInput(inputListUser);
             break;
         case 'user':
+            hideInput(inputListOldest);
+            hideInput(inputListNewest);
+            hideInput(inputListType);
+            showInput(inputListUser);
+            break;
+        case 'userAndDate':
             showInput(inputListOldest);
             showInput(inputListNewest);
             hideInput(inputListType);

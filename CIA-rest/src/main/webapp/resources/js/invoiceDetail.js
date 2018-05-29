@@ -35,6 +35,7 @@ $(document).on('click', '.btn-remove-item', function() {
 
     var last = $('.item-record').last()[0];
     $(last).removeClass('mb-2').addClass('mb-3');
+    recalculate();
 });
 
 $(document).on('change', '.item-count', function () {
@@ -59,33 +60,4 @@ function recalculate() {
         total += plus;
     }
     $('#price').val(total);
-}
-
-function comparePayerAndRecipient(payer, recipient) {
-    if (payer === recipient) {
-        $('#pbalert').css('display','block');
-        $('#submit-form')[0].disabled = true;
-    } else {
-        $('#pbalert').css('display', 'none');
-        $('#submit-form')[0].disabled = false;
-    }
-}
-
-$('#payer').change(function() {
-    var payer = $(this).val();
-    var recipient = $('#recipient').val();
-
-    comparePayerAndRecipient(payer, recipient);
-});
-
-$('#recipient').change(function() {
-    var recipient = $(this).val();
-    var payer = $('#payer').val();
-
-    comparePayerAndRecipient(payer, recipient);
-});
-
-if ($('form')[0].getAttribute('action') === '/accounting/createInvoice') {
-    $('#payer').val(0).change();
-    $('#recipient').val(0).change();
 }

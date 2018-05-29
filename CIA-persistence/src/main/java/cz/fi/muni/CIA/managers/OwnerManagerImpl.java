@@ -42,7 +42,7 @@ public class OwnerManagerImpl implements OwnerManager {
             if (owner.getId() != null) {
                 throw new OwnerException("Owner id is not null!");
             }
-            owner.setId(OWNER_ID);
+            owner.setId(DbUtils.getPersonNextId(configuration, collection));
 
             String xQuery = "let $accounting := doc('" + configuration.getAccountingResourceName()+ "')" +
                     "return update insert element owner { " +
@@ -58,7 +58,7 @@ public class OwnerManagerImpl implements OwnerManager {
                     "}, " +
                     "element accountNumber {'" + owner.getAccountNumber() + "'}," +
                     "element logo {'" + owner.getLogoBASE64() + "'}" +
-                    "} into $accounting";
+                    "} into $accounting/accounting";
             XQueryService service = (XQueryService) collection.getService("XQueryService", "1.0");
             service.setProperty("indent", "yes");
             service.setProperty("encoding", "UTF-8");
@@ -115,8 +115,12 @@ public class OwnerManagerImpl implements OwnerManager {
             CompiledExpression compiledExpression = service.compile(xQuery);
             ResourceSet resourceSet = service.execute(compiledExpression);
             ResourceIterator resourceIterator = resourceSet.getIterator();
-
-            return DbUtils.ownerXMLToOwner(resourceIterator.nextResource().getContent().toString());
+            Resource res = resourceIterator.nextResource();
+            if (res == null) {
+                return null;
+            } else {
+                return DbUtils.ownerXMLToOwner(res.getContent().toString());
+            }
         } catch (XMLDBException ex) {
             logger.log(Level.SEVERE, "XMLDBException during get owner: " + ex.getMessage());
             throw new OwnerException("Error during get owner");

@@ -4,8 +4,11 @@
 
 <o:header title="${title}" />
 <div class="container">
-    <div class="align-mid">
-        <div class="row mb-2 text-center">
+    <div class="">
+        <div class="row mb-5 mt-4 text-center align-mid">
+            <h1 class="col-md-12 home-title"><c:out value="${title}" /></h1>
+        </div>
+        <div class="row mb-2">
             <c:choose>
                 <c:when test="${not hasOwner}">
                     <div class="col-md-4 offset-md-4 ico-big">

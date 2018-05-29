@@ -177,16 +177,18 @@ public class InvoiceController {
                              @RequestParam(value="itemCount[]") int[] itemCount,
                              @RequestParam(value="itemPrice[]") double[] itemPricePerUnit,
                              @RequestParam(value="itemDesc[]") String[] itemDescription,
-                             @RequestParam Long personId,
+                             @RequestParam Long secondPerson,
                              @RequestParam String type,
                              @RequestParam("dueTo") @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate dueDate,
+                             @RequestParam("issued") @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate issued,
                              RedirectAttributes redirectAttributes, SessionStatus sessionStatus)
     {
         String message, viewName;
 
         try {
             setInvoiceItemsAndTotal(invoice, itemName, itemDescription, itemCount, itemPricePerUnit);
-            setInvoiceAttrs(invoice, LocalDate.now(), dueDate, personId, type);
+            setInvoiceAttrs(invoice, issued, dueDate, secondPerson, type);
+
 
             invoiceService.createInvoice(invoice);
             message = "Entry of invoice with id: " + invoice.getId() + " created!";
@@ -213,16 +215,17 @@ public class InvoiceController {
                               @RequestParam(value="itemCount[]") int[] itemCount,
                               @RequestParam(value="itemPrice[]") double[] itemPricePerUnit,
                               @RequestParam(value="itemDesc[]") String[] itemDescription,
-                              @RequestParam Long personId,
+                              @RequestParam Long secondPerson,
                               @RequestParam String type,
                               @RequestParam("dueTo") @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate dueDate,
+                              @RequestParam("issued") @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate issued,
                               RedirectAttributes redirectAttributes, SessionStatus sessionStatus)
     {
         String message, viewName;
 
         try {
             setInvoiceItemsAndTotal(invoice, itemName, itemDescription, itemCount, itemPricePerUnit);
-            setInvoiceAttrs(invoice, LocalDate.now(), dueDate, personId, type);
+            setInvoiceAttrs(invoice, issued, dueDate, secondPerson, type);
 
             invoiceService.editInvoice(invoice);
             message = "Entry of invoice with id: " + invoice.getId() + " edited!";

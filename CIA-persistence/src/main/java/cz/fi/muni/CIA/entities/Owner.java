@@ -14,6 +14,7 @@ public class Owner extends Person {
         return this.logoBASE64;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -24,7 +25,6 @@ public class Owner extends Person {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(getName(), getEmail(), getPhoneNumber(), getAddress(), getAccountNumber());
     }
 

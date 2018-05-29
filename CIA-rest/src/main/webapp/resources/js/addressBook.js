@@ -29,13 +29,13 @@ $('#details-close').on('click', function() {
 
 $('#submit-edit').on('click', function() {
     var id = $('#details #id')[0].getAttribute('value');
-    $('.details-form')[0].setAttribute('action', '/app/editPerson?id=' + id);
+    $('.details-form')[0].setAttribute('action', '/accounting/editPerson?id=' + id);
     $('.details-form')[0].submit();
 });
 
 $('#submit-delete').on('click', function() {
     var id = $('#details #id')[0].getAttribute('value');
-    $('.details-form')[0].setAttribute('action', '/app/deletePerson?id=' + id);
+    $('.details-form')[0].setAttribute('action', '/accounting/deletePerson?id=' + id);
     $('.details-form')[0].submit();
 });
 

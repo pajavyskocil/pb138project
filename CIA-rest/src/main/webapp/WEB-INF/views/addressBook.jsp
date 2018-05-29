@@ -119,8 +119,8 @@
             </div>
         </div>
         <div class="form-group row details-btns">
-            <input id="submit-edit" type="submit" value="Edit" class="col-md-3 offset-md-2 btn btn-danger">
-            <input id="submit-delete" type="submit" value="Delete" class="col-md-3 offset-md-2 btn btn-danger">
+            <button id="submit-edit" class="col-md-3 offset-md-2 btn btn-danger">Edit</button>
+            <button id="submit-delete" class="col-md-3 offset-md-2 btn btn-danger">Delete</button>
         </div>
     </form>
 </div>

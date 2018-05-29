@@ -113,3 +113,7 @@ a:focus {
 	width: auto;
 	max-width: 400px;
 }
+
+.home-title {
+	color: #dadada;
+}

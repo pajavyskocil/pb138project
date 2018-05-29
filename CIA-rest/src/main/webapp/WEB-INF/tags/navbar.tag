@@ -7,6 +7,9 @@
     <div class="navbar-collapse collapse" id="navbar">
         <ul class="navbar-nav justify-content-center d-flex flex-fill">
             <li class="nav-item">
+                <a class="nav-link <c:if test="${title eq 'Accounting'}"><c:out value="active"/></c:if>" href="/accounting/">Home</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link <c:if test="${title eq 'Invoices management'}"><c:out value="active"/></c:if>" href="/accounting/invoices">Invoices</a>
             </li>
             <li class="nav-item">
