@@ -35,7 +35,7 @@
                     <input class="input-group-btn btn btn-warning" type="submit" value="Search">
                 </div>
             </div>
-            <a href="/accounting/createInvoice" class="col-md-1 offset-md-4 btn btn-success"><i class="fas fa-plus"></i></a>
+            <a href="/accounting/createInvoice" class="col-md-1 offset-md-4 btn btn-success"><span class="btn btn-success"><i class="fas fa-plus"></i></span></a>
         </div>
         <div class="row mb-4">
             <div id="listOldest" class="input-hdn col-md-3 mb-3">
@@ -129,8 +129,7 @@
 </main>
 
 <div class="jumbotron" id="details">
-    <form class="container details-form" method="GET" action="">
-        <input id="id" type="hidden" name="id"/>
+    <div class="container details-form">
         <div class="row">
             <div class="col-md-1 offset-md-11">
                 <i id="details-close" class="point fas fa-times"></i>
@@ -138,17 +137,17 @@
         </div>
         <h3 id="details-header" class="mb-3 text-center"></h3>
         <div class="row mb-3">
-            <div class="col-md-6 input-group">
+            <div class="col-md-8 input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Payer/recipient</span>
                 </div>
-                <input id="secondPerson" class="form-control" name="secondPerson" type="text" disabled>
+                <div id="secondPerson" class="form-control"></div>
             </div>
-            <div class="col-md-6 input-group">
+            <div class="col-md-4 input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Type</span>
                 </div>
-                <input id="type" class="form-control" type="text" name="type" disabled/>
+                <div id="type" class="form-control"></div>
             </div>
         </div>
         <div class="row mb-3">
@@ -156,13 +155,13 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">Issued on</span>
                 </div>
-                <input class="form-control" type="date" id="issued" name="issued" disabled>
+                <div id="issued" class="form-control"></div>
             </div>
             <div class="col-md-6 input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Due to</span>
                 </div>
-                <input class="form-control" type="date" id="dueTo" name="dueTo" disabled>
+                <div id="dueTo" class="form-control"></div>
             </div>
         </div>
         <div class="row mb-3">
@@ -179,14 +178,17 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">Total</span>
                 </div>
-                <input id="price" class="form-control" type="number" name="text" disabled>
+                <div id="price" class="form-control"></div>
             </div>
         </div>
-        <div class="form-group row details-btns">
-            <button id="submit-edit" class="col-md-3 offset-md-2 btn btn-danger">Edit</button>
-                <button id="submit-delete" class="col-md-3 offset-md-2 btn btn-danger">Delete</button>
-        </div>
-    </form>
+        <form method="GET" action="">
+            <input id="id" type="hidden" name="id"/>
+            <div class="form-group row details-btns">
+                <input type="submit" value="Edit" id="submit-edit" class="col-md-3 offset-md-2 btn btn-danger">
+                <input type="submit" value="Delete" id="submit-delete" class="col-md-3 offset-md-2 btn btn-danger">
+            </div>
+        </form>
+    </div>
 </div>
 
 <o:footer script="invoices"/>

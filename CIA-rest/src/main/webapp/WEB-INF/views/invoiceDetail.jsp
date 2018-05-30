@@ -19,6 +19,7 @@
     </c:when>
     <c:otherwise>
         <c:set var="inputInvoiceType" value="disabled"/>
+        <c:set var="inputIssued" value="value=${invoice.issueDate} disabled"/>
         <c:set var="inputDueTo" value="value=${invoice.dueDate} disabled"/>
         <c:set var="inputItem" value="disabled"/>
         <c:set var="inputInvoicePrice" value="value=${invoice.price} disabled"/>
@@ -38,7 +39,7 @@
         <input type="hidden" name="id" value="<c:out value='${invoice.id}'/>"/>
         <h3 class="mb-3 text-center"><c:out value="${title}"/></h3>
         <div class="row mb-3 mb-2">
-            <div class="col-md-6 input-group">
+            <div class="col-md-8 input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Payer/recipient</span>
                 </div>
@@ -68,7 +69,7 @@
                     </c:otherwise>
                 </c:choose>
             </div>
-            <div class="col-md-6 input-group">
+            <div class="col-md-4 input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Type</span>
                 </div>

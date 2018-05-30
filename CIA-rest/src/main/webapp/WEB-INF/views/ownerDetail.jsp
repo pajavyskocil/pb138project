@@ -92,11 +92,13 @@
                 <input class="form-control" id="logo" type="file" placeholder="Logo" name="logo" accept="image/*">
             </div>
         </div>
+        <c:if test="${not empty owner.logoBASE64}">
         <div class="row mb-4">
             <div class="col-md-6 maxh-150">
-                <img id="preview" src="<c:if test="${not empty owner.logoBASE64}"><c:out value="${owner.logoBASE64}"/></c:if>" />
+                <img id="preview" src="<c:out value="${owner.logoBASE64}"/>" />
             </div>
         </div>
+        </c:if>
         <div class="form-group row details-btns">
             <input id="submit-edit" type="submit" value="Confirm" class="col-md-3 offset-md-2 btn btn-danger">
             <a href="/accounting/" class="col-md-3 offset-md-2 btn btn-light">Cancel</a>

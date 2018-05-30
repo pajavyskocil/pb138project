@@ -2,7 +2,7 @@ $('#btn-add-item').on('click', function() {
     if ($('form')[0].getAttribute('action').indexOf('deleteInvoice') >= 0) {
         return;
     }
-    var last = $('.item-record').last()[0];
+    var last = $('.item-record').last();
     var newNodes = $.parseHTML(
         '<div class="row mb-3 item-record">' +
         '   <div class="input-group col-md-11">' +
@@ -20,20 +20,20 @@ $('#btn-add-item').on('click', function() {
         '</div>');
 
 
-    $(last).removeClass('mb-3');
-    $(last).addClass('mb-2');
-    $('#items-after')[0].before(newNodes[0]);
+    last.removeClass('mb-3');
+    last.addClass('mb-2');
+    $('#items-after').before($(newNodes));
 });
 
 $(document).on('click', '.btn-remove-item', function() {
-    if ($('form')[0].getAttribute('action').indexOf('deleteInvoice') >= 0) {
+    if ($('form').attr('action').indexOf('deleteInvoice') >= 0) {
         return;
     }
     if ($('.item-record').length > 1) {
         $(this).parent().parent().remove();
     }
 
-    var last = $('.item-record').last()[0];
+    var last = $('.item-record').last();
     $(last).removeClass('mb-2').addClass('mb-3');
     recalculate();
 });
