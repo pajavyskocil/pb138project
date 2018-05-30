@@ -20,7 +20,9 @@
         <div class="searchbar-input col-md-4 offset-md-4">
             <input class="form-control" type="text" id="filter" placeholder="Filter records">
         </div>
-        <a href="/accounting/createPerson" class="col-md-1 offset-md-3 btn btn-success"><span class="btn btn-success"><i class="fas fa-plus"></i></span>
+        <a href="/accounting/createPerson" class="col-md-1 offset-md-3">
+            <span class="btn btn-success"><i class="fas fa-plus"></i></span>
+        </a>
     </div>
     <div class="row">
         <table class="table">
@@ -116,7 +118,7 @@
                 <div id="country" class="col-md-3 form-control"></div>
             </div>
         </div>
-        <form method="GET" action="">
+        <form method="GET" accept-charset="UTF-8" action="">
             <input id="id" type="hidden" name="id"/>
             <div class="form-group row details-btns">
                 <input type="submit" value="Edit" id="submit-edit" class="col-md-3 offset-md-2 btn btn-danger">

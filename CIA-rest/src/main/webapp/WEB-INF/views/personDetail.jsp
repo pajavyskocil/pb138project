@@ -46,7 +46,7 @@
             </div>
         </div>
     </c:if>
-    <form class="container details-form" method="POST" action="/accounting/<c:out value='${action}'/>">
+    <form class="container details-form" method="POST" accept-charset="UTF-8" action="/accounting/<c:out value='${action}'/>">
         <input type="hidden" name="id" value="${person.id}"/>
         <h3 class="mb-3 text-center"><c:out value="${title}"/></h3>
         <div class="row mb-3">

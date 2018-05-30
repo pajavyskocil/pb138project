@@ -16,7 +16,7 @@
             </div>
         </div>
     </c:if>
-    <form method="get" action="/accounting/invoices" class="mb-3">
+    <form method="get" action="/accounting/invoices" accept-charset="UTF-8" class="mb-3">
         <div class="row mb-3">
             <div class="list-type-select-input input-group col-md-7">
                 <div class="input-group-prepend">
@@ -35,7 +35,9 @@
                     <input class="input-group-btn btn btn-warning" type="submit" value="Search">
                 </div>
             </div>
-            <a href="/accounting/createInvoice" class="col-md-1 offset-md-4 btn btn-success"><span class="btn btn-success"><i class="fas fa-plus"></i></span></a>
+            <a href="/accounting/createInvoice" class="col-md-1 offset-md-4">
+                <span class="btn btn-success"><i class="fas fa-plus"></i></span>
+            </a>
         </div>
         <div class="row mb-4">
             <div id="listOldest" class="input-hdn col-md-3 mb-3">
@@ -181,7 +183,7 @@
                 <div id="price" class="form-control"></div>
             </div>
         </div>
-        <form method="GET" action="">
+        <form method="GET" accept-charset="UTF-8" action="">
             <input id="id" type="hidden" name="id"/>
             <div class="form-group row details-btns">
                 <input type="submit" value="Edit" id="submit-edit" class="col-md-3 offset-md-2 btn btn-danger">
