@@ -9,18 +9,20 @@
         <h2 class="col-md-12"><c:out value="${title}"/></h2>
     </div>
     <c:if test="${not empty message}">
-        <div class="row mb-2">
-            <div class="alert alert-success alert-dismissible col-md-6 offset-md-3 <c:out value='${alertType}'/>">
-                <button class="close" data-dismiss="alert">&times;</button>
-                <strong><c:out value="${message}"/></strong>
-            </div>
+    <div class="row mb-2">
+        <div class="alert alert-success alert-dismissible col-md-6 offset-md-3 <c:out value='${alertType}'/>">
+            <button class="close" data-dismiss="alert">&times;</button>
+            <strong><c:out value="${message}"/></strong>
         </div>
+    </div>
     </c:if>
     <div class="row searchbar mb-3">
         <div class="searchbar-input col-md-4 offset-md-4">
             <input class="form-control" type="text" id="filter" placeholder="Filter records">
         </div>
-        <a href="/accounting/createPerson" class="col-md-1 offset-md-3 btn btn-success"><i class="fas fa-plus"></i></a>
+        <a href="/accounting/createPerson" class="col-md-1 offset-md-3">
+            <span class="btn btn-success"><i class="fas fa-plus"></i></span>
+        </a>
     </div>
     <div class="row">
         <table class="table">
@@ -36,17 +38,16 @@
             </thead>
             <tbody>
             <c:forEach var="person" items="${persons}">
-                <c:set var="address" value="${person.address}"/>
                 <tr class="record">
                     <td class="hidden id"><c:out value="${person.id}"/></td>
                     <td class="name"><c:out value="${person.name}" /></td>
                     <td class="email"><c:out value="${person.email}" /></td>
                     <td class="phone"><c:out value="${person.phoneNumber}" /></td>
                     <td class="hidden accNr"><c:out value="${person.accountNumber}" /></td>
-                    <td class="hidden street"><c:out value="${address.streetAddress}" /></td>
-                    <td class="hidden city"><c:out value="${address.city}" /></td>
-                    <td class="hidden zip"><c:out value="${address.postCode}" /></td>
-                    <td class="hidden country"><c:out value="${address.country}" /></td>
+                    <td class="hidden street"><c:out value="${person.address.streetAddress}" /></td>
+                    <td class="hidden city"><c:out value="${person.address.city}" /></td>
+                    <td class="hidden zip"><c:out value="${person.address.postCode}" /></td>
+                    <td class="hidden country"><c:out value="${person.address.country}" /></td>
                     <td class="width-100 text-center">
                         <a href="/accounting/editPerson?id=<c:out value='${person.id}'/>">
                             <i class="fas fa-edit"></i>
@@ -66,8 +67,7 @@
 </main>
 
 <div class="jumbotron" id="details">
-    <form class="container details-form" method="GET" action="">
-        <input id="id" type="hidden" name="id"/>
+    <div class="container details-form">
         <div class="row">
             <div class="col-md-1 offset-md-11">
                 <i id="details-close" class="point fas fa-times"></i>
@@ -79,13 +79,13 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">Name</span>
                 </div>
-                <input id="name" class="form-control" type="text" name="name" disabled>
+                <div id="name" class="form-control"></div>
             </div>
             <div class="col-md-6 input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Email</span>
                 </div>
-                <input id="email" class="form-control" type="email" name="email" disabled>
+                <div id="email" class="form-control"></div>
             </div>
         </div>
         <div class="row mb-3">
@@ -93,13 +93,13 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">Phone</span>
                 </div>
-                <input id="phone" class="form-control" type="text" name="phoneNumber" disabled>
+                <div id="phone" class="form-control"></div>
             </div>
             <div class="col-md-6 input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Account nr.</span>
                 </div>
-                <input id="accNr" class="form-control" type="text" name="accountNumber" disabled>
+                <div id="accNr" class="form-control"></div>
             </div>
         </div>
         <div class="row mb-3">
@@ -112,16 +112,19 @@
         </div>
         <div class="row mb-4 address">
             <div class="input-group col-md-12">
-                <input id="street" class="col-md-4 form-control" type="text" name="streetAddress" disabled>
-                <input id="city" class="col-md-3 form-control" type="text" name="city" disabled>
-                <input id="zip"class="col-md-2 form-control" type="text" name="postCode" disabled>
-                <input id="country" class="col-md-3 form-control" type="text" name="country" disabled>
+                <div id="street" class="col-md-4 form-control"></div>
+                <div id="city" class="col-md-3 form-control"></div>
+                <div id="zip" class="col-md-2 form-control"></div>
+                <div id="country" class="col-md-3 form-control"></div>
             </div>
         </div>
-        <div class="form-group row details-btns">
-            <input id="submit-edit" type="submit" value="Edit" class="col-md-3 offset-md-2 btn btn-danger">
-            <input id="submit-delete" type="submit" value="Delete" class="col-md-3 offset-md-2 btn btn-danger">
-        </div>
-    </form>
+        <form method="GET" accept-charset="UTF-8" action="">
+            <input id="id" type="hidden" name="id"/>
+            <div class="form-group row details-btns">
+                <input type="submit" value="Edit" id="submit-edit" class="col-md-3 offset-md-2 btn btn-danger">
+                <input type="submit" value="Delete" id="submit-delete" class="col-md-3 offset-md-2 btn btn-danger">
+            </div>
+        </form>
+    </div>
 </div>
 <o:footer script="addressBook"/>

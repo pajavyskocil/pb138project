@@ -16,7 +16,7 @@
             </div>
         </div>
     </c:if>
-    <form method="get" action="/accounting/invoices" class="mb-3">
+    <form method="get" action="/accounting/invoices" accept-charset="UTF-8" class="mb-3">
         <div class="row mb-3">
             <div class="list-type-select-input input-group col-md-7">
                 <div class="input-group-prepend">
@@ -26,15 +26,18 @@
                     <option value="all">All</option>
                     <option value="dates">Between dates</option>
                     <option value="type">Of type</option>
-                    <option value="user">Of user and between dates</option>
+                    <option value="user">Of user</option>
+                    <option value="userAndDate">Of user and between dates</option>
                     <option value="typeAndDate">Of type and between dates</option>
                     <option value="userAndType">Of user, type and between dates</option>
                 </select>
                 <div class="input-group-append">
-                    <input class="input-group-btn btn btn-warning" type="submit" value="Filter">
+                    <input class="input-group-btn btn btn-warning" type="submit" value="Search">
                 </div>
             </div>
-            <a href="/accounting/createInvoice" class="col-md-1 offset-md-4 btn btn-success"><i class="fas fa-plus"></i></a>
+            <a href="/accounting/createInvoice" class="col-md-1 offset-md-4">
+                <span class="btn btn-success"><i class="fas fa-plus"></i></span>
+            </a>
         </div>
         <div class="row mb-4">
             <div id="listOldest" class="input-hdn col-md-3 mb-3">
@@ -82,8 +85,7 @@
                 <tr>
                     <th>Id</th>
                     <th>Type</th>
-                    <th>Payer</th>
-                    <th>Recipient</th>
+                    <th>Payer / recipient</th>
                     <th>Cost</th>
                     <th class="width-100 text-center">Edit</th>
                     <th class="width-100 text-center">Delete</th>
@@ -94,10 +96,17 @@
             <c:forEach var="invoice" items="${invoices}">
                 <tr class="record">
                     <c:set var="items" value="${invoice.items}"/>
+                    <c:choose>
+                        <c:when test="${invoice.invoiceType eq 'INCOME'}">
+                            <c:set var="secondPersonText" value="${invoice.payer.name} <${invoice.payer.email}>"/>
+                        </c:when>
+                        <c:when test="${invoice.invoiceType eq 'EXPENSE'}">
+                            <c:set var="secondPersonText" value="${invoice.recipient.name} <${invoice.recipient.email}>"/>
+                        </c:when>
+                    </c:choose>
                     <td class="id"><c:out value="${invoice.id}" /></td>
                     <td class="type"><c:out value="${invoice.invoiceType}"/></td>
-                    <td class="payer"><c:out value="${invoice.payer.name} <${invoice.payer.email}>"/></td>
-                    <td class="recipient"><c:out value="${invoice.recipient.name} <${invoice.recipient.email}>"/></td>
+                    <td class="secondPerson"><c:out value="${secondPersonText}"/></td>
                     <td class="price"><c:out value="${invoice.price}"/></td>
                     <td class="hidden">
                         <c:forEach var="item" items="${items}">
@@ -122,7 +131,7 @@
 </main>
 
 <div class="jumbotron" id="details">
-    <form class="container details-form" method="GET" action="">
+    <div class="container details-form">
         <div class="row">
             <div class="col-md-1 offset-md-11">
                 <i id="details-close" class="point fas fa-times"></i>
@@ -130,31 +139,31 @@
         </div>
         <h3 id="details-header" class="mb-3 text-center"></h3>
         <div class="row mb-3">
-            <div class="col-md-6 input-group">
+            <div class="col-md-8 input-group">
                 <div class="input-group-prepend">
-                    <span class="input-group-text">Payer</span>
+                    <span class="input-group-text">Payer/recipient</span>
                 </div>
-                <input id="payer" class="form-control" name="payer" type="text" disabled>
+                <div id="secondPerson" class="form-control"></div>
             </div>
-            <div class="col-md-6 input-group">
+            <div class="col-md-4 input-group">
                 <div class="input-group-prepend">
-                    <span class="input-group-text">Recipient</span>
+                    <span class="input-group-text">Type</span>
                 </div>
-                <input id="recipient" class="form-control" name="recipient" type="text" disabled>
+                <div id="type" class="form-control"></div>
             </div>
         </div>
         <div class="row mb-3">
             <div class="col-md-6 input-group">
                 <div class="input-group-prepend">
-                    <span class="input-group-text">Issued</span>
+                    <span class="input-group-text">Issued on</span>
                 </div>
-                <input class="form-control" type="date" id="issued" name="issued" disabled>
+                <div id="issued" class="form-control"></div>
             </div>
             <div class="col-md-6 input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Due to</span>
                 </div>
-                <input class="form-control" type="date" id="dueTo" name="dueTo" disabled>
+                <div id="dueTo" class="form-control"></div>
             </div>
         </div>
         <div class="row mb-3">
@@ -171,20 +180,17 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">Total</span>
                 </div>
-                <input id="price" class="form-control" type="number" name="text" disabled>
-            </div>
-            <div class="col-md-6 input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Type</span>
-                </div>
-                <input id="type" class="form-control" type="text" name="type" disabled/>
+                <div id="price" class="form-control"></div>
             </div>
         </div>
-        <div class="form-group row details-btns">
-            <input id="submit-edit" type="submit" value="Edit" class="col-md-3 offset-md-2 btn btn-danger">
-            <input id="submit-delete" type="submit" value="Delete" class="col-md-3 offset-md-2 btn btn-danger">
-        </div>
-    </form>
+        <form method="GET" accept-charset="UTF-8" action="">
+            <input id="id" type="hidden" name="id"/>
+            <div class="form-group row details-btns">
+                <input type="submit" value="Edit" id="submit-edit" class="col-md-3 offset-md-2 btn btn-danger">
+                <input type="submit" value="Delete" id="submit-delete" class="col-md-3 offset-md-2 btn btn-danger">
+            </div>
+        </form>
+    </div>
 </div>
 
 <o:footer script="invoices"/>

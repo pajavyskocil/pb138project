@@ -5,42 +5,35 @@ var inputListUser = $('#listPerson');
 
 $('.more').click(function () {
     $('#details').css('display', 'block');
-    var row = $(this).parent()[0];
-    var id = row.getElementsByClassName('id')[0].textContent;
-    var payer = row.getElementsByClassName('payer')[0].textContent;
-    var recipient = row.getElementsByClassName('recipient')[0].textContent;
-    var issued = row.getElementsByClassName('issued')[0].textContent;
-    var dueTo = row.getElementsByClassName('due-to')[0].textContent;
-    var price = row.getElementsByClassName('price')[0].textContent;
-    var type = row.getElementsByClassName('type')[0].textContent;
-    var items = row.getElementsByClassName('item');
+    var row = $(this).parent();
+    var items = row.find('.item');
 
-    $('#details-header')[0].textContent = 'Invoice #' + id;
-    $('#payer')[0].setAttribute('value', payer);
-    $('#recipient')[0].setAttribute('value', recipient);
-    $('#issued')[0].setAttribute('value', issued);
-    $('#dueTo')[0].setAttribute('value', dueTo);
-    $('#price')[0].setAttribute('value', price);
-    $('#type')[0].setAttribute('value', type);
+    $('#details-header').text('Invoice #' + row.find('.id').text());
+    $('#id').val(row.find('.id').text());
+    $('#secondPerson').text(row.find('.secondPerson').text());
+    $('#issued').text(row.find('.issued').text());
+    $('#dueTo').text(row.find('.due-to').text());
+    $('#price').text(row.find('.price').text());
+    $('#type').text(row.find('.type').text());
 
     for (var i=0; i < items.length; i++) {
-        var name = items[i].getElementsByClassName('item-name')[0].textContent;
-        var desc = items[i].getElementsByClassName('item-desc')[0].textContent;
-        var count = items[i].getElementsByClassName('item-count')[0].textContent;
-        var price = items[i].getElementsByClassName('item-price')[0].textContent;
+        var name = $(items[i]).find('.item-name').text();
+        var desc = $(items[i]).find('.item-desc').text();
+        var count = $(items[i]).find('.item-count').text();
+        var itemPrice = $(items[i]).find('.item-price').text();
         var newNodes = $.parseHTML(
             '<div class="row mb-3 item-record">' +
             '   <div class="input-group col-md-11">' +
-            '       <input class="col-md-3 form-control" type="text" name="itemName[]" value="' + name + '" disabled>' +
-            '       <input class="col-md-4 form-control" type="text" name="itemDesc[]" value="' + desc + '" disabled>' +
-            '       <input class="col-md-2 form-control item-count" type="number" min="1" placeholder="1" type="text" name="itemCount[]" value="' + count + '" disabled>' +
-            '       <input class="col-md-2 form-control item-price" type="number" step=".01" min="0.01" placeholder="0.01" type="text" name="itemPrice[]" value="' + price + '" disabled>' +
+            '       <div class="col-md-3 form-control">' + name + '</div>' +
+            '       <div class="col-md-4 form-control">' + desc + '</div>' +
+            '       <div class="col-md-2 form-control">' + count + '</div>' +
+            '       <div class="col-md-2 form-control item-price">' + itemPrice + '</div>' +
             '       <div class="col-md-1 no-padd input-group-append">' +
             '           <span class="input-group-text">&euro;</span>' +
             '       </div>' +
             '   </div>' +
             '</div>');
-        $('#items-after')[0].before(newNodes[0]);
+        $('#items-after').before($(newNodes));
     }
 });
 
@@ -52,42 +45,38 @@ $('#details-close').on('click', function() {
 });
 
 $('#submit-edit').on('click', function() {
-    var id = $('#details #id')[0].getAttribute('value');
-    $('.details-form')[0].setAttribute('action', '/app/editInvoice?id=' + id);
-    $('.details-form')[0].submit();
+    $('.details-form form').attr('action', '/accounting/editInvoice?id=' + $('#id').val()).submit();
 });
 
 $('#submit-delete').on('click', function() {
-    var id = $('#details #id')[0].getAttribute('value');
-    $('.details-form')[0].setAttribute('action', '/app/deleteInvoice?id=' + id);
-    $('.details-form')[0].submit();
+    $('.details-form form').attr('action', '/accounting/deleteInvoice?id=' + $('#id').val()).submit();
 });
 
 function hideInput(container) {
     container.addClass('input-hdn');
-    $.each(container[0].getElementsByTagName('input'), function () {
-        this.required = false;
-        this.disabled = true;
+    $.each($(container).find('input'), function () {
+        $(this).prop('required', false);
+        $(this).prop('disabled', true);
     });
-    $.each(container[0].getElementsByTagName('select'), function () {
-        this.required = false;
-        this.disabled = true;
+    $.each($(container).find('select'), function () {
+        $(this).prop('required', false);
+        $(this).prop('disabled', true);
     });
 }
 
 function showInput(container) {
     container.removeClass('input-hdn');
-    $.each(container[0].getElementsByTagName('input'), function () {
-        this.required = true;
-        this.disabled = false;
+    $.each($(container).find('input'), function () {
+        $(this).prop('required', true);
+        $(this).prop('disabled', false);
     });
-    $.each(container[0].getElementsByTagName('select'), function () {
-        this.required = true;
-        this.disabled = false;
+    $.each($(container).find('select'), function () {
+        $(this).prop('required', true);
+        $(this).prop('disabled', false);
     });
 }
 
-$('#list-type').change(function() {
+inputListType.change(function() {
     var val = $(this).val();
     switch (val) {
         case 'dates':
@@ -103,6 +92,12 @@ $('#list-type').change(function() {
             hideInput(inputListUser);
             break;
         case 'user':
+            hideInput(inputListOldest);
+            hideInput(inputListNewest);
+            hideInput(inputListType);
+            showInput(inputListUser);
+            break;
+        case 'userAndDate':
             showInput(inputListOldest);
             showInput(inputListNewest);
             hideInput(inputListType);

@@ -142,7 +142,7 @@ public class PersonManagerImpl implements PersonManager {
 
 	@Override
 	public List<Person> getAll() {
-		logger.log(Level.INFO, "Getting all person");
+		logger.log(Level.INFO, "Getting all persons");
 		List<Person> personList = new ArrayList<>();
 		try{
 			String xQuery = "let $personList := doc('" + configuration.getAccountingResourceName() + "')" +
@@ -161,9 +161,8 @@ public class PersonManagerImpl implements PersonManager {
 			}
 		} catch (XMLDBException ex) {
 			logger.log(Level.SEVERE, "XMLDBException during get all person: " + ex.getMessage());
-			throw new PersonException("Error during get all person");
+			throw new PersonException("Error during get all persons");
 		}
 		return personList;
-
 	}
 }

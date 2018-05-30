@@ -1,15 +1,9 @@
 package cz.fi.muni.CIA;
 
-import cz.fi.muni.CIA.Exceptions.DatabaseException;
-import cz.fi.muni.CIA.Exceptions.ConfigException;
-import cz.fi.muni.CIA.Exceptions.InvoiceException;
-import cz.fi.muni.CIA.Exceptions.PersonException;
-import cz.fi.muni.CIA.entities.Address;
-import cz.fi.muni.CIA.entities.Configuration;
-import cz.fi.muni.CIA.entities.Invoice;
-import cz.fi.muni.CIA.entities.InvoiceType;
-import cz.fi.muni.CIA.entities.Item;
-import cz.fi.muni.CIA.entities.Person;
+import cz.fi.muni.CIA.Exceptions.*;
+import cz.fi.muni.CIA.entities.*;
+import cz.fi.muni.CIA.managers.OwnerManager;
+import cz.fi.muni.CIA.managers.OwnerManagerImpl;
 import cz.fi.muni.CIA.managers.PersonManager;
 import cz.fi.muni.CIA.managers.PersonManagerImpl;
 import org.w3c.dom.Document;
@@ -104,7 +98,7 @@ public class DbUtils {
 
 	private static Collection createCollection(Configuration configuration) {
 		logger.log(Level.INFO, "Creating collection with name " + configuration.getDbCollectionName());
-		Collection collection = null;
+		Collection collection;
 		try {
 			Collection parent =  DatabaseManager.getCollection(configuration.getDbPrefix(), configuration.getDbUserName(), configuration.getDbUserPassword());
 			CollectionManagementService mgt = (CollectionManagementService) parent.getService("CollectionManagementService", "1.0");
@@ -159,7 +153,7 @@ public class DbUtils {
 
 	}
 
-	public static void incrementAccountingId(Configuration configuration, Collection collection) {
+	public static void incrementInvoiceId(Configuration configuration, Collection collection) {
 		String xQuery = "let $metadata := doc('" + configuration.getMetadataResourceName() +"')" +
 				"let $next-id := $metadata//invoice-next-id/text() + 1" +
 				"return update replace $metadata//invoice-next-id/text() with $next-id";
@@ -171,7 +165,6 @@ public class DbUtils {
 				"let $next-id := $metadata//person-next-id/text() + 1" +
 				"return update replace $metadata//person-next-id/text() with $next-id";
 		incrementId(collection, xQuery);
-
 	}
 
 	private static void incrementId(Collection collection, String query) {
@@ -190,7 +183,7 @@ public class DbUtils {
 		String xQuery = "let $metadata := doc('" + configuration.getMetadataResourceName() +"')" +
 				"return $metadata//invoice-next-id/text()";
 		Long id =  getNextId(collection, xQuery);
-		incrementAccountingId(configuration, collection);
+		incrementInvoiceId(configuration, collection);
 		return id;
 	}
 
@@ -260,10 +253,57 @@ public class DbUtils {
 		return person;
 	}
 
+	public static Owner ownerXMLToOwner(String ownerXML) {
+		Owner owner = new Owner();
+		DocumentBuilder documentBuilder;
+		try {
+			documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			InputSource inputSource = new InputSource();
+			inputSource.setCharacterStream(new StringReader(ownerXML));
+			Document document = documentBuilder.parse(inputSource);
+			NodeList nodeList = document.getElementsByTagName("owner");
+			Element element = (Element) nodeList.item(0);
+
+			owner.setId(Long.parseLong(element.getAttribute("pid")));
+
+			owner.setName(element.getElementsByTagName("name").item(0).getTextContent());
+
+			owner.setEmail(element.getElementsByTagName("email").item(0).getTextContent());
+
+			owner.setPhoneNumber(element.getElementsByTagName("phone").item(0).getTextContent());
+
+			Address address = new Address();
+			Element addressElement = (Element) element.getElementsByTagName("address").item(0);
+
+			address.setStreetAddress(addressElement.getElementsByTagName("streetAddress").item(0).getTextContent());
+			address.setCity(addressElement.getElementsByTagName("city").item(0).getTextContent());
+			address.setCountry(addressElement.getElementsByTagName("country").item(0).getTextContent());
+			address.setPostCode(addressElement.getElementsByTagName("postalCode").item(0).getTextContent());
+
+			owner.setAddress(address);
+
+			owner.setAccountNumber(element.getElementsByTagName("accountNumber").item(0).getTextContent());
+			owner.setLogoBASE64(element.getElementsByTagName("logo").item(0).getTextContent());
+
+		} catch (ParserConfigurationException ex) {
+			logger.log(Level.SEVERE, "ParserConfigurationException during convert ownerXML to Owner: " + ex.getMessage() );
+			throw new OwnerException("Error during parsing XML to Owner");
+		} catch (SAXException ex) {
+			logger.log(Level.SEVERE, "SAXException during convert ownerXML to Owner: " + ex.getMessage() );
+			throw new OwnerException("Error during parsing XML to Owner");
+		} catch (IOException ex) {
+			logger.log(Level.SEVERE, "IOException during convert ownerXML to Owner: " + ex.getMessage());
+			throw new OwnerException("Error during parsing XML to Owner");
+		}
+		return owner;
+
+	}
+
 
 	public static Invoice invoiceXMLToInvoice(Collection collection, String invoiceXML) {
 		Invoice invoice = new Invoice();
 		PersonManager personManager = new PersonManagerImpl(collection);
+		OwnerManager ownerManager = new OwnerManagerImpl(collection);
 		DocumentBuilder documentBuilder;
 		try {
 			documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -274,15 +314,15 @@ public class DbUtils {
 			Element element = (Element) nodeList.item(0);
 			invoice.setId(Long.parseLong(element.getAttribute("id")));
 
-			if (element.getAttribute("type").equals(InvoiceType.INCOME.toString())) {
+			if (element.getAttribute("type").equalsIgnoreCase(InvoiceType.INCOME.toString())) {
 				invoice.setInvoiceType(InvoiceType.INCOME);
+				invoice.setPayer(personManager.findById(Long.parseLong(element.getElementsByTagName("payerID").item(0).getTextContent())));
+				invoice.setRecipient(ownerManager.getOwner());
 			} else {
 				invoice.setInvoiceType(InvoiceType.EXPENSE);
+				invoice.setRecipient(personManager.findById(Long.parseLong(element.getElementsByTagName("recipientID").item(0).getTextContent())));
+				invoice.setPayer(ownerManager.getOwner());
 			}
-
-			invoice.setPayer(personManager.findById(Long.parseLong(element.getElementsByTagName("payerID").item(0).getTextContent())));
-
-			invoice.setRecipient(personManager.findById(Long.parseLong(element.getElementsByTagName("recipientID").item(0).getTextContent())));
 
 			invoice.setIssueDate(LocalDate.parse(element.getElementsByTagName("issueDate").item(0).getTextContent()));
 
@@ -346,6 +386,7 @@ public class DbUtils {
 				throw new ConfigException("Cannot load config file.");
 			}
 		}
+
 		configuration.setDbUserName(properties.getProperty("db_user_name"));
 		configuration.setDbUserPassword(properties.getProperty("db_user_password"));
 		configuration.setDbPrefix(properties.getProperty("db_prefix"));
@@ -372,13 +413,13 @@ public class DbUtils {
 		// check input
 		boolean isValid = true;
 		try  {
-
 			validator.validate(source);
 		}
 		catch (SAXException e) {
 
 			isValid = false;
 		}
+
 		return isValid;
 	}
 }

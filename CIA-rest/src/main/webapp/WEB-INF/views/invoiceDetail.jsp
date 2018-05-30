@@ -6,19 +6,22 @@
 <c:choose>
     <c:when test="${action eq 'createInvoice'}">
         <c:set var="inputInvoiceType" value="required"/>
+        <c:set var="inputIssued" value="max=${dateToday} required"/>
         <c:set var="inputDueTo" value="min=${dateToday} required"/>
         <c:set var="inputInvoicePrice" value="disabled"/>
     </c:when>
     <c:when test="${action eq 'editInvoice'}">
         <c:set var="inputInvoiceType" value="required"/>
+        <c:set var="inputIssued" value="max=${dateToday} value=${invoice.issueDate} required"/>
         <c:set var="inputDueTo" value="min=${dateToday} value=${invoice.dueDate} required"/>
         <c:set var="inputItem" value="required"/>
         <c:set var="inputInvoicePrice" value="value=${invoice.price} disabled"/>
     </c:when>
     <c:otherwise>
-        <c:set var="inputInvoiceType" value="readonly"/>
-        <c:set var="inputDueTo" value="value=${invoice.dueDate} readonly"/>
-        <c:set var="inputItem" value="readonly"/>
+        <c:set var="inputInvoiceType" value="disabled"/>
+        <c:set var="inputIssued" value="value=${invoice.issueDate} disabled"/>
+        <c:set var="inputDueTo" value="value=${invoice.dueDate} disabled"/>
+        <c:set var="inputItem" value="disabled"/>
         <c:set var="inputInvoicePrice" value="value=${invoice.price} disabled"/>
     </c:otherwise>
 </c:choose>
@@ -32,33 +35,33 @@
             </div>
         </div>
     </c:if>
-    <form class="container details-form" method="POST" action="/accounting/<c:out value='${action}' />">
+    <form class="container details-form" method="POST" accept-charset="UTF-8" action="/accounting/<c:out value='${action}' />">
         <input type="hidden" name="id" value="<c:out value='${invoice.id}'/>"/>
         <h3 class="mb-3 text-center"><c:out value="${title}"/></h3>
         <div class="row mb-3 mb-2">
-            <div class="col-md-8 offset-md-2">
-                <div id="pbalert" class="alert alert-danger">
-                    <strong>Payer and Recipient cannot be the same person!</strong>
-                </div>
-            </div>
-            <div class="col-md-6 input-group">
+            <div class="col-md-8 input-group">
                 <div class="input-group-prepend">
-                    <span class="input-group-text">Payer</span>
+                    <span class="input-group-text">Payer/recipient</span>
                 </div>
                 <c:choose>
+                    <c:when test="${invoice.invoiceType eq 'INCOME'}">
+                        <c:set var="otherPersonId" value="${invoice.payer.id}"/>
+                        <c:set var="otherPersonText" value="${invoice.payer.name} <${invoice.payer.email}>"/>
+                    </c:when>
+                    <c:when test="${invoice.invoiceType eq 'EXPENSE'}">
+                        <c:set var="otherPersonId" value="${invoice.recipient.id}"/>
+                        <c:set var="otherPersonText" value="${invoice.recipient.name} <${invoice.recipient.email}>"/>
+                    </c:when>
+                </c:choose>
+                <c:choose>
                     <c:when test="${action eq 'deleteInvoice'}">
-                        <c:set var="personText" value="${invoice.payer.name} <${invoice.payer.email}>"/>
-                        <input type="hidden" name="payerId" value="<c:out value='${invoice.payer.id}'/>"/>
-                        <input class="form-control" name="payer" id="payer" type="text" value="${personText}" disabled>
+                        <input class="form-control" name="secondPerson" id="secondPerson" type="text" value="${otherPersonText}" disabled>
                     </c:when>
                     <c:otherwise>
-                        <select class="form-control" id="payer" name="payerId" required>
+                        <select class="form-control" id="secondPerson" name="secondPerson" required>
                             <c:forEach var="person" items="${persons}">
                                 <c:set var="personText" value="${person.name} <${person.email}>"/>
-                                <c:if test="${not empty invoice.payer}">
-                                    <c:set var="selected" value="${invoice.payer.id eq person.id}"/>
-                                </c:if>
-                                <option value="${person.id}" <c:if test="${selected}">selected</c:if>>
+                                <option value="${person.id}" <c:if test="${person.id eq otherPersonId}">selected</c:if>>
                                     <c:out value='${personText}'/>
                                 </option>
                             </c:forEach>
@@ -66,34 +69,7 @@
                     </c:otherwise>
                 </c:choose>
             </div>
-            <div class="col-md-6 input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Recipient</span>
-                </div>
-                <c:choose>
-                    <c:when test="${action eq 'deleteInvoice'}">
-                        <c:set var="personText" value="${invoice.recipient.name} <${invoice.recipient.email}>"/>
-                        <input type="hidden" name="recipientId" value="<c:out value='${invoice.recipient.id}'/>"/>
-                        <input class="form-control" name="recipient" id="recipient" type="text" value="${personText}" disabled>
-                    </c:when>
-                    <c:otherwise>
-                        <select class="form-control" id="recipient" name="recipientId" required>
-                            <c:forEach var="person" items="${persons}">
-                                <c:set var="personText" value="${person.name} <${person.email}>"/>
-                                <c:if test="${not empty invoice.recipient}">
-                                    <c:set var="selected" value="${invoice.recipient.id eq person.id}"/>
-                                </c:if>
-                                <option value="${person.id}" <c:if test="${selected}">selected</c:if>>
-                                    <c:out value='${personText}'/>
-                                </option>
-                            </c:forEach>
-                        </select>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-6 input-group">
+            <div class="col-md-4 input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Type</span>
                 </div>
@@ -101,6 +77,14 @@
                     <option <c:if test="${(empty invoice.invoiceType) or (invoice.invoiceType eq 'INCOME')}"><c:out value="selected"/></c:if> value="income">Income</option>
                     <option <c:if test="${invoice.invoiceType eq 'EXPENSE'}"><c:out value="selected"/></c:if> value="expense">Expense</option>
                 </select>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6 input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Issued on</span>
+                </div>
+                <input class="form-control" type="date" id="issued" name="issued" <c:out value="${inputIssued}"/>>
             </div>
             <div class="col-md-6 input-group">
                 <div class="input-group-prepend">

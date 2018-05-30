@@ -77,11 +77,14 @@ public class AddressBookController {
             personService.createPerson(person);
             message = "Entry of person with name: " + person.getName() + " created!";
             viewName = "redirect:/accounting/addressBook";
+            redirectAttributes.addFlashAttribute("alertType", "alert-success");
             sessionStatus.setComplete();
         } catch (Exception ex) {
             message = "Error has occurred when creating entry in database, please try again!";
             viewName = "redirect:/accounting/personOperationFailed";
             model.addAttribute("person", person);
+            redirectAttributes.addFlashAttribute("alertType", "alert-danger");
+            redirectAttributes.addFlashAttribute("title", "Create person");
             redirectAttributes.addFlashAttribute("action", "createPerson");
         }
 
@@ -99,11 +102,14 @@ public class AddressBookController {
             personService.editPerson(person);
             message = "Entry of person with name: " + person.getName() + " edited!";
             viewName = "redirect:/accounting/addressBook";
+            redirectAttributes.addFlashAttribute("alertType", "alert-success");
             sessionStatus.setComplete();
         } catch (Exception ex) {
             message = "Error has occurred when editing entry in database, please try again!";
             viewName = "redirect:/accounting/personOperationFailed";
             model.addAttribute("person", person);
+            redirectAttributes.addFlashAttribute("alertType", "alert-danger");
+            redirectAttributes.addFlashAttribute("title", "Edit person");
             redirectAttributes.addFlashAttribute("action", "editPerson");
         }
 
@@ -120,11 +126,14 @@ public class AddressBookController {
             personService.deletePerson(person.getId());
             message = "Entry of person with name: " + person.getName() + " deleted!";
             viewName = "redirect:/accounting/addressBook";
+            redirectAttributes.addFlashAttribute("alertType", "alert-success");
             sessionStatus.setComplete();
         } catch (Exception ex) {
             message = "Error has occurred when deleting entry in database, please try again!";
             viewName = "redirect:/accounting/personOperationFailed";
             model.addAttribute("person", person);
+            redirectAttributes.addFlashAttribute("alertType", "alert-danger");
+            redirectAttributes.addFlashAttribute("title", "Delete person");
             redirectAttributes.addFlashAttribute("action", "deletePerson");
         }
 
