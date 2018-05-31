@@ -17,7 +17,7 @@ Team members:
 `Install eXistDB on your machine. Create user admin with password admin1. Create collection called accounting.`
 
 # Running the project
-`Run the eXistDB server on localhost`
+`Run the eXistDB server on localhost - port 8081`
 
 `git clone https://github.com/LizzardCorp/pb138project.git`
 
@@ -26,3 +26,5 @@ Team members:
 `mvn clean install`
 
 `mvn jetty:run`
+
+`access localhost:8082/accounting in your browser` 
