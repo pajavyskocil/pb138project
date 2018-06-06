@@ -287,6 +287,8 @@ public class DbUtils {
 			owner.setAccountNumber(element.getElementsByTagName("accountNumber").item(0).getTextContent());
 			owner.setLogoBASE64(element.getElementsByTagName("logo").item(0).getTextContent());
 
+			owner.setXmlRepresentation(ownerXML);
+
 		} catch (ParserConfigurationException ex) {
 			logger.log(Level.SEVERE, "ParserConfigurationException during convert ownerXML to Owner: " + ex.getMessage() );
 			throw new OwnerException("Error during parsing XML to Owner");

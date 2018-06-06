@@ -45,6 +45,7 @@ public class LoginController {
             message = "Only one owner entry can be defined";
             viewName = "redirect:/accounting/";
             redirectAttributes.addFlashAttribute("message", message);
+            redirectAttributes.addFlashAttribute("alertType", "alert-danger");
         } else {
             viewName = "ownerDetail";
             model.addAttribute("owner", new Owner());
@@ -62,6 +63,7 @@ public class LoginController {
             message = "No owner entry has been defined";
             viewName = "redirect:/accounting/";
             redirectAttributes.addFlashAttribute("message", message);
+            redirectAttributes.addFlashAttribute("alertType", "alert-danger");
         } else {
             viewName = "ownerDetail";
             model.addAttribute("action", "editOwner");
@@ -79,7 +81,7 @@ public class LoginController {
 
     /* Processing of creating new Owner entry */
     @RequestMapping(value = "/createOwner", method = RequestMethod.POST, consumes = {"multipart/form-data"})
-    public String addOwner(Model model, @ModelAttribute Owner owner, @ModelAttribute Address address,
+    public String addOwner(@ModelAttribute Owner owner, @ModelAttribute Address address,
                            @RequestParam("logo") MultipartFile file, RedirectAttributes redirectAttributes,
                            SessionStatus sessionStatus) {
         String message, viewName;
@@ -92,14 +94,14 @@ public class LoginController {
             owner.setAddress(address);
             ownerService.createOwner(owner);
 
-            message = "Entry of owner with name: " + owner.getName() + " created!";
+            message = "Entry of owner with name: " + owner.getName() + " created";
             viewName = "redirect:/accounting/";
             redirectAttributes.addFlashAttribute("alertType", "alert-success");
             sessionStatus.setComplete();
         } catch (Exception ex) {
             message = "Error has occurred when creating entry in database, please try again!";
             viewName = "redirect:/accounting/ownerOperationFailed";
-            model.addAttribute("owner", owner);
+            redirectAttributes.addFlashAttribute("owner", owner);
             redirectAttributes.addFlashAttribute("alertType", "alert-danger");
             redirectAttributes.addFlashAttribute("title", "Create owner");
             redirectAttributes.addFlashAttribute("action", "createOwner");
@@ -111,7 +113,7 @@ public class LoginController {
 
     /* Processing of editing Owner entry */
     @RequestMapping(value = "/editOwner", method = RequestMethod.POST, consumes = {"multipart/form-data"})
-    public String editOwner(Model model, @ModelAttribute Owner owner, @ModelAttribute Address address,
+    public String editOwner(@ModelAttribute Owner owner, @ModelAttribute Address address,
                             @RequestParam("logo") MultipartFile file, RedirectAttributes redirectAttributes,
                             SessionStatus sessionStatus) {
         String message, viewName;
@@ -124,14 +126,14 @@ public class LoginController {
             owner.setAddress(address);
             ownerService.updateOwner(owner);
 
-            message = "Entry of owner with name: " + owner.getName() + " edited!";
             viewName = "redirect:/accounting/";
+            message = "Entry of owner with name: " + owner.getName() + " edited";
             redirectAttributes.addFlashAttribute("alertType", "alert-success");
             sessionStatus.setComplete();
         } catch (Exception ex) {
-            message = "Error has occurred when editing entry in database, please try again!";
+            message = "Error has occurred when editing entry in database, please try again...";
             viewName = "redirect:/accounting/ownerOperationFailed";
-            model.addAttribute("owner", owner);
+            redirectAttributes.addFlashAttribute("owner", owner);
             redirectAttributes.addFlashAttribute("alertType", "alert-danger");
             redirectAttributes.addFlashAttribute("title", "Edit owner");
             redirectAttributes.addFlashAttribute("action", "editOwner");
