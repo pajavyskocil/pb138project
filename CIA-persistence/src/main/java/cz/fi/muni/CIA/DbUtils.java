@@ -240,6 +240,8 @@ public class DbUtils {
 
 			person.setAccountNumber(element.getElementsByTagName("accountNumber").item(0).getTextContent());
 
+			person.setXmlRepresentation(personXML);
+
 		} catch (ParserConfigurationException ex) {
 			logger.log(Level.SEVERE, "ParserConfigurationException during convert personXML to Person: " + ex.getMessage() );
 			throw new PersonException("Error during parsing XML to Person");
@@ -329,6 +331,8 @@ public class DbUtils {
 			invoice.setDueDate(LocalDate.parse(element.getElementsByTagName("dueDate").item(0).getTextContent()));
 
 			invoice.setPrice(Double.parseDouble(element.getElementsByTagName("totalPrice").item(0).getTextContent()));
+			
+			invoice.setXmlRepresentation(invoiceXML);
 
 			Element itemsElement = (Element) element.getElementsByTagName("items").item(0);
 
