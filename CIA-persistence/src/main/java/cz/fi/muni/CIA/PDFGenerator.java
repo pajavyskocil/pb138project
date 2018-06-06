@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.transform.Source;
@@ -19,6 +21,7 @@ import com.itextpdf.html2pdf.HtmlConverter;
 
 import cz.fi.muni.CIA.Exceptions.GeneratorException;
 import cz.fi.muni.CIA.entities.Invoice;
+import cz.fi.muni.CIA.entities.Person;
 
 public class PDFGenerator {
     private static String xmlToHtml(String xmlData, String xsltPath) {
@@ -32,7 +35,7 @@ public class PDFGenerator {
             transformer.transform(text, new StreamResult(writer));
 
             return writer.toString();
-
+            
         } catch(TransformerConfigurationException e) {
             throw new GeneratorException("Error occured during XSL Transformer configuration: " + e.toString());
         } catch(TransformerException e) {
@@ -46,13 +49,43 @@ public class PDFGenerator {
         sb.append(invoice.getPayer().getXmlRepresentation());
         sb.append(invoice.getRecipient().getXmlRepresentation());
 
-        String htmlData = xmlToHtml("<pdfData>"+sb.toString()+"</pdfData>", "CIA-persistence/src/main/resources/xml-to-html.xsl");
+        String htmlData = xmlToHtml("<pdfData>"+sb.toString()+"</pdfData>", "CIA-persistence/src/main/resources/invoice2html.xsl");
 
         try (FileOutputStream fos = new FileOutputStream("CIA-persistence/pdf/invoice"+invoice.getId().toString()+".pdf")){
 			HtmlConverter.convertToPdf(htmlData, fos);
-
 		} catch (IOException e) {
-			throw new GeneratorException("IO Error occured during PDF generation: " + e.toString());
+			throw new GeneratorException("IO Error occured while generating PDF: " + e.toString());
+		}
+    }
+
+    public static void addressBookToPDF(List<Person> people) {
+        StringBuilder sb = new StringBuilder();
+        for(Person person : people) {
+            sb.append(person.getXmlRepresentation());
+        }
+
+        String htmlData = xmlToHtml("<pdfData><addressBook>" + sb.toString() + "</addressBook></pdfData>", "CIA-persistence/src/main/resources/ab2html.xsl");
+
+        try (FileOutputStream fos = new FileOutputStream("CIA-persistence/pdf/addressBook.pdf")){
+			HtmlConverter.convertToPdf(htmlData, fos);
+		} catch (IOException e) {
+			throw new GeneratorException("IO Error occured while generating PDF: " + e.toString());
+		}
+    }
+
+    public static void flowToPDF(List<Invoice> invoices, String mode, LocalDate from, LocalDate to) {
+        if (!Arrays.asList("income","expense").contains(mode)) { mode = "balance"; }
+        StringBuilder sb = new StringBuilder();
+        for(Invoice invoice : invoices) {
+            sb.append("<flowItem>"+invoice.getXmlRepresentation()+invoice.getPayer().getXmlRepresentation()+invoice.getRecipient().getXmlRepresentation()+"</flowItem>");
+        }
+        String xmlData = "<pdfData><range><from>"+from.toString()+"</from><to>"+to.toString()+"</to></range><" + mode + ">" + sb.toString() + "</"+mode+"></pdfData>";
+        String htmlData = xmlToHtml(xmlData, "CIA-persistence/src/main/resources/flow2html.xsl");
+
+        try (FileOutputStream fos = new FileOutputStream("CIA-persistence/pdf/" + mode + ".pdf")){
+			HtmlConverter.convertToPdf(htmlData, fos);
+		} catch (IOException e) {
+			throw new GeneratorException("IO Error occured while generating PDF: " + e.toString());
 		}
     }
 
