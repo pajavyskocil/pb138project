@@ -1,11 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="o" tagdir="/WEB-INF/tags" %>
 
 <o:header title="${title}" />
 <div class="container">
-    <div class="">
-        <div class="row mb-5 mt-4 text-center align-mid">
+    <div class="align-mid">
+        <div class="row mb-5 mt-4 text-center">
             <h1 class="col-md-12 home-title"><c:out value="${title}" /></h1>
         </div>
         <div class="row mb-2">

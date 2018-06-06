@@ -45,20 +45,10 @@ public class InvoiceController {
     /* Entry point into manager */
     @RequestMapping(value = "/invoices", method = RequestMethod.GET)
     public String showInvoices(Model model) {
-        model.addAttribute("invoices", invoiceService.getAllInvoices());
         model.addAttribute("title", "Invoices management");
         model.addAttribute("persons", personService.getAllPersons());
-
-        return "invoices";
-    }
-
-    /* Let user choose parameters for displayed invoices */
-    @RequestMapping(value = "/invoices", method = RequestMethod.GET, params = {"listType"})
-    public String showInvoicesByType(Model model, @RequestParam String listType) {
-        InvoiceType invoiceType = listType.equals("expense") ? InvoiceType.EXPENSE : InvoiceType.INCOME;
-        model.addAttribute("invoices", invoiceService.getInvoicesByType(invoiceType));
-        model.addAttribute("title", "Invoices management");
-        model.addAttribute("persons", personService.getAllPersons());
+        model.addAttribute("incomes", invoiceService.getInvoicesByType(InvoiceType.INCOME));
+        model.addAttribute("expenses", invoiceService.getInvoicesByType(InvoiceType.EXPENSE));
 
         return "invoices";
     }
@@ -66,9 +56,11 @@ public class InvoiceController {
     /* Let user choose parameters for displayed invoices */
     @RequestMapping(value = "/invoices", method = RequestMethod.GET, params = {"personId"})
     public String showInvoicesByUser(Model model, @RequestParam Long personId) {
-        model.addAttribute("invoices", invoiceService.getInvoicesByPerson(personId));
+        List<Invoice> invoices = invoiceService.getInvoicesByPersonId(personId);
         model.addAttribute("title", "Invoices management");
         model.addAttribute("persons", personService.getAllPersons());
+        model.addAttribute("incomes", invoiceService.filterInvoicesByType(invoices, InvoiceType.INCOME));
+        model.addAttribute("expenses", invoiceService.filterInvoicesByType(invoices, InvoiceType.EXPENSE));
 
         return "invoices";
     }
@@ -78,23 +70,12 @@ public class InvoiceController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate oldestDate = LocalDate.parse(oldest, formatter);
         LocalDate newestDate = LocalDate.parse(newest, formatter);
-        model.addAttribute("invoices", invoiceService.getInvoicesInDateInterval(oldestDate, newestDate));
+        List<Invoice> invoices = invoiceService.getInvoicesInDateInterval(oldestDate, newestDate);
+
         model.addAttribute("title", "Invoices management");
         model.addAttribute("persons", personService.getAllPersons());
-
-        return "invoices";
-    }
-
-    @RequestMapping(value = "/invoices", method = RequestMethod.GET, params = {"oldest", "newest", "listType"})
-    public String showInvoicesByTypeAndDate(Model model, @RequestParam String listType, @RequestParam String oldest,
-                                            @RequestParam String newest) {
-        InvoiceType invoiceType = listType.equals("expense") ? InvoiceType.EXPENSE : InvoiceType.INCOME;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate oldestDate = LocalDate.parse(oldest, formatter);
-        LocalDate newestDate = LocalDate.parse(newest, formatter);
-        model.addAttribute("invoices", invoiceService.getInvoicesByTypeAndDate(oldestDate, newestDate, invoiceType));
-        model.addAttribute("title", "Invoices management");
-        model.addAttribute("persons", personService.getAllPersons());
+        model.addAttribute("incomes", invoiceService.filterInvoicesByType(invoices, InvoiceType.INCOME));
+        model.addAttribute("expenses", invoiceService.filterInvoicesByType(invoices, InvoiceType.EXPENSE));
 
         return "invoices";
     }
@@ -106,26 +87,12 @@ public class InvoiceController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate oldestDate = LocalDate.parse(oldest, formatter);
         LocalDate newestDate = LocalDate.parse(newest, formatter);
-        model.addAttribute("invoices", invoiceService
-                .getInvoicesByPersonIdAndDate(oldestDate, newestDate, personId));
+        List<Invoice> invoices = invoiceService.getInvoicesByPersonIdAndDate(oldestDate, newestDate, personId);
+
         model.addAttribute("title", "Invoices management");
         model.addAttribute("persons", personService.getAllPersons());
-
-        return "invoices";
-    }
-
-    /* Let user choose parameters for displayed invoices */
-    @RequestMapping(value = "/invoices", method = RequestMethod.GET, params = {"oldest", "newest", "personId", "listType"})
-    public String showInvoicesByUserTypeAndDate(Model model, @RequestParam Long personId, @RequestParam String listType,
-                                                @RequestParam String oldest, @RequestParam String newest) {
-        InvoiceType invoiceType = listType.equals("expense") ? InvoiceType.EXPENSE : InvoiceType.INCOME;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate oldestDate = LocalDate.parse(oldest, formatter);
-        LocalDate newestDate = LocalDate.parse(newest, formatter);
-        model.addAttribute("invoices", invoiceService
-                .getInvoicesByPersonIdAndTypeAndDate(oldestDate, newestDate, personId, invoiceType));
-        model.addAttribute("title", "Invoices management");
-        model.addAttribute("persons", personService.getAllPersons());
+        model.addAttribute("incomes", invoiceService.filterInvoicesByType(invoices, InvoiceType.INCOME));
+        model.addAttribute("expenses", invoiceService.filterInvoicesByType(invoices, InvoiceType.EXPENSE));
 
         return "invoices";
     }
@@ -172,7 +139,7 @@ public class InvoiceController {
 
     /* Processing of creating new Invoice entry */
     @RequestMapping(value = "/createInvoice", method = RequestMethod.POST)
-    public String addInvoice(Model model, @ModelAttribute Invoice invoice,
+    public String addInvoice(@ModelAttribute Invoice invoice,
                              @RequestParam(value="itemName[]") String[] itemName,
                              @RequestParam(value="itemCount[]") int[] itemCount,
                              @RequestParam(value="itemPrice[]") double[] itemPricePerUnit,
@@ -189,16 +156,16 @@ public class InvoiceController {
             setInvoiceItemsAndTotal(invoice, itemName, itemDescription, itemCount, itemPricePerUnit);
             setInvoiceAttrs(invoice, issued, dueDate, secondPerson, type);
 
-
             invoiceService.createInvoice(invoice);
-            message = "Entry of invoice with id: " + invoice.getId() + " created!";
+
+            message = "Entry of invoice #" + invoice.getId() + " created";
             viewName = "redirect:/accounting/invoices";
             redirectAttributes.addFlashAttribute("alertType", "alert-success");
             sessionStatus.setComplete();
         } catch (Exception ex) {
-            message = "Error has occurred when creating entry in database, please try again!";
+            message = "Error has occurred when saving changes, please try again...";
             viewName = "redirect:/accounting/invoiceOperationFailed";
-            model.addAttribute("invoice", invoice);
+            redirectAttributes.addFlashAttribute("invoice", invoice);
             redirectAttributes.addFlashAttribute("alertType", "alert-danger");
             redirectAttributes.addFlashAttribute("title", "Create invoice");
             redirectAttributes.addFlashAttribute("action", "createInvoice");
@@ -210,7 +177,7 @@ public class InvoiceController {
 
     /* Processing of editing Invoice entry */
     @RequestMapping(value = "/editInvoice", method = RequestMethod.POST)
-    public String editInvoice(Model model, @ModelAttribute Invoice invoice,
+    public String editInvoice(@ModelAttribute Invoice invoice,
                               @RequestParam(value="itemName[]") String[] itemName,
                               @RequestParam(value="itemCount[]") int[] itemCount,
                               @RequestParam(value="itemPrice[]") double[] itemPricePerUnit,
@@ -228,14 +195,15 @@ public class InvoiceController {
             setInvoiceAttrs(invoice, issued, dueDate, secondPerson, type);
 
             invoiceService.editInvoice(invoice);
-            message = "Entry of invoice with id: " + invoice.getId() + " edited!";
+
+            message = "Entry of invoice #" + invoice.getId() + " edited";
             viewName = "redirect:/accounting/invoices";
             redirectAttributes.addFlashAttribute("alertType", "alert-success");
             sessionStatus.setComplete();
         } catch (Exception ex) {
-            message = "Error has occurred when storing entry in database, please try again!";
+            message = "Error has occurred when saving changes, please try again...";
             viewName = "redirect:/accounting/invoiceOperationFailed";
-            model.addAttribute("invoice", invoice);
+            redirectAttributes.addFlashAttribute("invoice", invoice);
             redirectAttributes.addFlashAttribute("alertType", "alert-danger");
             redirectAttributes.addFlashAttribute("title", "Edit invoice");
             redirectAttributes.addFlashAttribute("action", "editInvoice");
@@ -247,20 +215,33 @@ public class InvoiceController {
 
     /* Processing of deleting Invoice entry */
     @RequestMapping(value = "/deleteInvoice", method = RequestMethod.POST)
-    public String deleteInvoice(Model model, @ModelAttribute Invoice invoice, RedirectAttributes redirectAttributes,
-                               SessionStatus sessionStatus) {
+    public String deleteInvoice(@ModelAttribute Invoice invoice,
+                                @RequestParam(value="itemName[]") String[] itemName,
+                                @RequestParam(value="itemCount[]") int[] itemCount,
+                                @RequestParam(value="itemPrice[]") double[] itemPricePerUnit,
+                                @RequestParam(value="itemDesc[]") String[] itemDescription,
+                                @RequestParam Long secondPerson,
+                                @RequestParam String type,
+                                @RequestParam("dueTo") @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate dueDate,
+                                @RequestParam("issued") @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate issued,
+                                RedirectAttributes redirectAttributes, SessionStatus sessionStatus)
+    {
         String message, viewName;
 
         try {
+            setInvoiceItemsAndTotal(invoice, itemName, itemDescription, itemCount, itemPricePerUnit);
+            setInvoiceAttrs(invoice, issued, dueDate, secondPerson, type);
+
             invoiceService.deleteInvoice(invoice.getId());
-            message = "Entry of invoice with id: " + invoice.getId() + " deleted!";
+
+            message = "Entry of invoice #" + invoice.getId() + " deleted";
             viewName = "redirect:/accounting/invoices";
             redirectAttributes.addFlashAttribute("alertType", "alert-success");
             sessionStatus.setComplete();
         } catch (Exception ex) {
-            message = "Error has occurred when deleting entry in database, please try again!";
+            message = "Error has occurred when saving changes, please try again...";
             viewName = "redirect:/accounting/invoiceOperationFailed";
-            model.addAttribute("invoice", invoice);
+            redirectAttributes.addFlashAttribute("invoice", invoice);
             redirectAttributes.addFlashAttribute("alertType", "alert-danger");
             redirectAttributes.addFlashAttribute("title", "Delete invoice");
             redirectAttributes.addFlashAttribute("action", "deleteInvoice");

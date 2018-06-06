@@ -33,16 +33,16 @@ public class InvoiceServiceImpl implements InvoiceService {
 	}
 
 	@Override
-	public void deleteInvoice(Long id) {
-		idCheck(id);
-		invoiceManager.deleteInvoice(id);
-	}
-
-	@Override
 	public void editInvoice(Invoice invoice) {
 		invoiceCheck(invoice);
 		idCheck(invoice.getId());
 		invoiceManager.updateInvoice(invoice);
+	}
+
+	@Override
+	public void deleteInvoice(Long id) {
+		idCheck(id);
+		invoiceManager.deleteInvoice(id);
 	}
 
 	@Override
@@ -57,6 +57,16 @@ public class InvoiceServiceImpl implements InvoiceService {
 	}
 
 	@Override
+	public List<Invoice> getInvoicesByType(InvoiceType type) {
+		typeCheck(type);
+		if (type == InvoiceType.EXPENSE) {
+			return invoiceManager.getAllExpenses();
+		} else {
+			return invoiceManager.getAllIncomes();
+		}
+	}
+
+	@Override
 	public List<Invoice> getInvoicesByPersonId(Long personId) {
 		idCheck(personId);
 		List<Invoice> allInvoices = getAllInvoices();
@@ -64,13 +74,12 @@ public class InvoiceServiceImpl implements InvoiceService {
 	}
 
 	@Override
-	public List<Invoice> getInvoicesByPersonIdAndTypeAndDate(LocalDate oldest, LocalDate newest, Long personId, InvoiceType type) {
-		idCheck(personId);
+	public List<Invoice> getInvoicesInDateInterval(LocalDate oldest, LocalDate newest) {
+		dateCheck(oldest, newest);
 
-		List<Invoice> allInvoices = getInvoicesByType(type);
-		allInvoices = selectInvoicesByDate(oldest, newest, allInvoices);
+		List<Invoice> allInvoices = getAllInvoices();
 
-		return selectInvoicesByPersonId(personId, allInvoices);
+		return selectInvoicesByDate(oldest, newest, allInvoices);
 	}
 
 	@Override
@@ -84,38 +93,14 @@ public class InvoiceServiceImpl implements InvoiceService {
 	}
 
 	@Override
-	public List<Invoice> getInvoicesByTypeAndDate(LocalDate oldest, LocalDate newest, InvoiceType type) {
-		dateCheck(oldest, newest);
-
-		List<Invoice> allInvoices = getInvoicesByType(type);
-
-		return selectInvoicesByDate(oldest, newest, allInvoices);
-	}
-
-	@Override
-	public List<Invoice> getInvoicesInDateInterval(LocalDate oldest, LocalDate newest) {
-		dateCheck(oldest, newest);
-
-		List<Invoice> allInvoices = getAllInvoices();
-
-		return selectInvoicesByDate(oldest, newest, allInvoices);
-	}
-
-	@Override
-	public List<Invoice> getInvoicesByType(InvoiceType type) {
-		typeCheck(type);
-		if (type == InvoiceType.EXPENSE) {
-			return invoiceManager.getAllExpenses();
-		} else {
-			return invoiceManager.getAllIncomes();
+	public List<Invoice> filterInvoicesByType(List<Invoice> input, InvoiceType type) {
+		List<Invoice> filtered = new ArrayList<>();
+		for (Invoice i : input) {
+			if (i.getInvoiceType().equals(type)) {
+				filtered.add(i);
+			}
 		}
-	}
-
-	@Override
-	public List<Invoice> getInvoicesByPerson(Long personId) {
-		idCheck(personId);
-
-		return invoiceManager.getAllForPerson(personId);
+		return filtered;
 	}
 
 	private void idCheck(Long id) {

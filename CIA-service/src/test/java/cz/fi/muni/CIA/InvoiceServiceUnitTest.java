@@ -134,20 +134,6 @@ public class InvoiceServiceUnitTest {
 	}
 
 	@Test
-	public void testGetInvoiceByTypeAndDate() {
-		invoiceService.getInvoicesByTypeAndDate(LocalDate.of(2016, 1, 1), LocalDate.of(2019, 1, 1), InvoiceType.EXPENSE);
-
-		verify(invoiceManager, times(1)).getAllExpenses();
-	}
-
-	@Test
-	public void testGetInvoicesByPersonIdAndTypeAndDate() {
-		invoiceService.getInvoicesByPersonIdAndTypeAndDate(LocalDate.of(2016, 1, 1), LocalDate.of(2019, 1, 1), 1L, InvoiceType.INCOME);
-
-		verify(invoiceManager, times(1)).getAllIncomes();
-	}
-
-	@Test
 	public void testGetInvoicesInDateInterval() {
 		invoiceService.getInvoicesInDateInterval(LocalDate.of(2016, 1, 1), LocalDate.of(2019, 1, 1));
 
@@ -174,19 +160,10 @@ public class InvoiceServiceUnitTest {
 		invoiceService.getInvoicesByType(null);
 	}
 
-	@Test (expectedExceptions=IllegalArgumentException.class)
-	public void testGetInvoicesByTypeAndNullDate() {
-		invoiceService.getInvoicesByTypeAndDate(null, null, InvoiceType.EXPENSE);
-	}
 
 	@Test (expectedExceptions=IllegalArgumentException.class)
 	public void testGetInvoicesInNullDateInterval() {
 		invoiceService.getInvoicesInDateInterval(null, null);
-	}
-
-	@Test (expectedExceptions=IllegalArgumentException.class)
-	public void testGetInvoicesByNegativePersonIdAndTypeAndDate() {
-		invoiceService.getInvoicesByPersonIdAndTypeAndDate(LocalDate.of(2016, 1, 1), LocalDate.of(2019, 1, 1),-1L, InvoiceType.EXPENSE);
 	}
 
 	@Test (expectedExceptions=IllegalArgumentException.class)
