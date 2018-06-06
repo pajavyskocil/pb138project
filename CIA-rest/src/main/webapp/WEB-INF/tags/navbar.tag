@@ -1,4 +1,5 @@
 <%@ tag pageEncoding="UTF-8" %>
+<%@ tag trimDirectiveWhitespaces="true" %>
 <%@ attribute name="title" required="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -11,9 +12,6 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link <c:if test="${title eq 'Invoices management'}">active</c:if>" href="/accounting/invoices">Invoices</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <c:if test="${title eq 'Statistics'}">active</c:if>" href="/accounting/statistics">Statistics</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <c:if test="${title eq 'Person list'}">active</c:if>" href="/accounting/addressBook">Address Book</a>

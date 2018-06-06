@@ -1,39 +1,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="o" tagdir="/WEB-INF/tags" %>
 
 <o:header title="${title}"/>
 <c:choose>
-    <c:when test="${action eq 'createInvoice'}">
-        <c:set var="inputInvoiceType" value="required"/>
-        <c:set var="inputIssued" value="max=${dateToday} required"/>
-        <c:set var="inputDueTo" value="min=${dateToday} required"/>
-        <c:set var="inputInvoicePrice" value="disabled"/>
+    <c:when test="${(action eq 'createInvoice') or (action eq 'editInvoice')}">
+        <c:set var="inputParams" value="required"/>
     </c:when>
-    <c:when test="${action eq 'editInvoice'}">
-        <c:set var="inputInvoiceType" value="required"/>
-        <c:set var="inputIssued" value="max=${dateToday} value=${invoice.issueDate} required"/>
-        <c:set var="inputDueTo" value="min=${dateToday} value=${invoice.dueDate} required"/>
-        <c:set var="inputItem" value="required"/>
-        <c:set var="inputInvoicePrice" value="value=${invoice.price} disabled"/>
+    <c:when test="${action eq 'deleteInvoice'}">
+        <c:set var="inputParams" value="readonly"/>
     </c:when>
-    <c:otherwise>
-        <c:set var="inputInvoiceType" value="disabled"/>
-        <c:set var="inputIssued" value="value=${invoice.issueDate} disabled"/>
-        <c:set var="inputDueTo" value="value=${invoice.dueDate} disabled"/>
-        <c:set var="inputItem" value="disabled"/>
-        <c:set var="inputInvoicePrice" value="value=${invoice.price} disabled"/>
-    </c:otherwise>
 </c:choose>
 
 <div class="jumbotron">
     <c:if test="${not empty message}">
-        <div class="row mb-2">
-            <div class="alert alert-danger alert-dismissible col-md-6 offset-md-3 <c:out value='${alertType}'/>">
-                <button class="close" data-dismiss="alert">&times;</button>
-                <strong><c:out value="${message}"/></strong>
-            </div>
-        </div>
+        <o:alert alertType="${alertType}" message="${message}"/>
     </c:if>
     <form class="container details-form" method="POST" accept-charset="UTF-8" action="/accounting/<c:out value='${action}' />">
         <input type="hidden" name="id" value="<c:out value='${invoice.id}'/>"/>
@@ -55,7 +37,8 @@
                 </c:choose>
                 <c:choose>
                     <c:when test="${action eq 'deleteInvoice'}">
-                        <input class="form-control" name="secondPerson" id="secondPerson" type="text" value="${otherPersonText}" disabled>
+                        <input type="hidden" name="secondPerson" value="<c:out value="${otherPersonId}"/>">
+                        <input class="form-control" name="secondPersonText" id="secondPerson" type="text" value="<c:out value="${otherPersonText}"/>" disabled>
                     </c:when>
                     <c:otherwise>
                         <select class="form-control" id="secondPerson" name="secondPerson" required>
@@ -73,7 +56,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">Type</span>
                 </div>
-                <select class="form-control" name="type" <c:out value="${inputInvoiceType}"/>>
+                <select class="form-control" name="type" <c:out value="${inputParams}"/>>
                     <option <c:if test="${(empty invoice.invoiceType) or (invoice.invoiceType eq 'INCOME')}"><c:out value="selected"/></c:if> value="income">Income</option>
                     <option <c:if test="${invoice.invoiceType eq 'EXPENSE'}"><c:out value="selected"/></c:if> value="expense">Expense</option>
                 </select>
@@ -84,13 +67,13 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">Issued on</span>
                 </div>
-                <input class="form-control" type="date" id="issued" name="issued" <c:out value="${inputIssued}"/>>
+                <input class="form-control" type="date" id="issued" name="issued" value="<c:out value="${invoice.issueDate}"/>" <c:out value="${inputParams}"/>>
             </div>
             <div class="col-md-6 input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Due to</span>
                 </div>
-                <input class="form-control" type="date" id="dueTo" name="dueTo" <c:out value="${inputDueTo}"/>>
+                <input class="form-control" type="date" id="dueTo" name="dueTo" value="<c:out value="${invoice.dueDate}"/>" <c:out value="${inputParams}"/>>
             </div>
         </div>
         <div class="row mb-3">
@@ -123,10 +106,10 @@
             <c:forEach var="item" items="${invoice.items}">
                 <div class="row mb-3 item-record">
                     <div class="input-group col-md-11">
-                        <input class="col-md-3 form-control" type="text" placeholder="Name" name="itemName[]" value="<c:out value='${item.name}'/>" <c:out value='${inputItem}'/>>
-                        <input class="col-md-4 form-control" type="text" placeholder="Description" name="itemDesc[]" value="<c:out value='${item.description}'/>" <c:out value='${inputItem}'/>>
-                        <input class="col-md-2 form-control item-count" type="number" min="1" placeholder="1" name="itemCount[]" value="<c:out value='${item.count}'/>" <c:out value='${inputItem}'/>>
-                        <input class="col-md-2 form-control item-price" type="number" step=".01" min="0.01" placeholder="0.01" name="itemPrice[]" value="<c:out value='${item.price}'/>" <c:out value='${inputItem}'/>>
+                        <input class="col-md-3 form-control" type="text" placeholder="Name" name="itemName[]" value="<c:out value='${item.name}'/>" <c:out value='${inputParams}'/>>
+                        <input class="col-md-4 form-control" type="text" placeholder="Description" name="itemDesc[]" value="<c:out value='${item.description}'/>" <c:out value='${inputParams}'/>>
+                        <input class="col-md-2 form-control item-count" type="number" min="1" placeholder="1" name="itemCount[]" value="<c:out value='${item.count}'/>" <c:out value='${inputParams}'/>>
+                        <input class="col-md-2 form-control item-price" type="number" step=".01" min="0.01" placeholder="0.01" name="itemPrice[]" value="<c:out value='${item.price}'/>" <c:out value='${inputParams}'/>>
                         <div class="col-md-1 no-padd input-group-append">
                             <span class="input-group-text">&euro;</span>
                         </div>
@@ -143,7 +126,10 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">Total</span>
                 </div>
-                <input class="form-control" type="text" id="price" name="price" <c:out value='${inputInvoicePrice}'/>>
+                <input class="form-control" type="text" id="price" name="price" value="<c:out value="${invoice.price}"/>" <c:out value="${inputParams}"/>>
+                <div class="input-group-append">
+                    <span class="input-group-text">&euro;</span>
+                </div>
             </div>
             <div class="col-md-1 offset-md-5">
                 <span class="btn btn-success" id="btn-add-item"><i class="fas fa-plus"></i></span>

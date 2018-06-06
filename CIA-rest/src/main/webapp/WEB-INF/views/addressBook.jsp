@@ -1,28 +1,30 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="o" tagdir="/WEB-INF/tags" %>
 
 <o:header title="${title}" />
 <o:navbar title="${title}" />
 <main class="container">
-    <div class="row section-title mb-4 mt-3">
+    <div class="row section-title mb-4 mt-4">
         <h2 class="col-md-12"><c:out value="${title}"/></h2>
     </div>
     <c:if test="${not empty message}">
-    <div class="row mb-2">
-        <div class="alert alert-success alert-dismissible col-md-6 offset-md-3 <c:out value='${alertType}'/>">
-            <button class="close" data-dismiss="alert">&times;</button>
-            <strong><c:out value="${message}"/></strong>
-        </div>
-    </div>
+        <o:alert alertType="${alertType}" message="${message}"/>
     </c:if>
     <div class="row searchbar mb-3">
-        <div class="searchbar-input col-md-4 offset-md-4">
+        <div class="searchbar-input col-md-5 input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+            </div>
             <input class="form-control" type="text" id="filter" placeholder="Filter records">
         </div>
-        <a href="/accounting/createPerson" class="col-md-1 offset-md-3">
-            <span class="btn btn-success"><i class="fas fa-plus"></i></span>
-        </a>
+        <div class="col-md-2 offset-md-4 text-right">
+            <a href="/accounting/exportAddressBook" class="btn btn-danger">Export PDF</a>
+        </div>
+        <div class="col-md-1">
+            <a href="/accounting/createPerson" class="btn btn-danger"><i class="fas fa-plus"></i></a>
+        </div>
     </div>
     <div class="row">
         <table class="table">
@@ -31,9 +33,9 @@
                     <th>Name</th>
                     <th>E-mail</th>
                     <th>Phone nr.</th>
+                    <th class="width-100 text-center">Details</th>
                     <th class="width-100 text-center">Edit</th>
                     <th class="width-100 text-center">Delete</th>
-                    <th class="width-100 text-center">Details</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,17 +50,17 @@
                     <td class="hidden city"><c:out value="${person.address.city}" /></td>
                     <td class="hidden zip"><c:out value="${person.address.postCode}" /></td>
                     <td class="hidden country"><c:out value="${person.address.country}" /></td>
-                    <td class="width-100 text-center">
+                    <td class="width-100 text-center col-bl more"><i class="btn fas fa-info"></i></td>
+                    <td class="width-100 text-center col-bl">
                         <a href="/accounting/editPerson?id=<c:out value='${person.id}'/>">
-                            <i class="fas fa-edit"></i>
+                            <i class="btn fas fa-edit"></i>
                         </a>
                     </td>
-                    <td class="width-100 text-center">
+                    <td class="width-100 text-center col-bl">
                         <a href="/accounting/deletePerson?id=<c:out value='${person.id}'/>">
-                            <i class="fas fa-ban"></i>
+                            <i class="btn fas fa-ban"></i>
                         </a>
                     </td>
-                    <td class="more width-100 text-center"><i class="fas fa-info"></i></td>
                 </tr>
             </c:forEach>
             </tbody>

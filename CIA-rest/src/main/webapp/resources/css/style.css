@@ -3,6 +3,10 @@ body {
 	background-color: #444;
 }
 
+a {
+	outline: none;
+}
+
 .flex-fill {
 	flex:1;
 }
@@ -20,6 +24,11 @@ body {
 
 .table {
 	background-color: #fff;
+}
+
+thead {
+	background-color: #005caf;
+	color: #fafafa;
 }
 
 td.hidden {
@@ -54,7 +63,7 @@ a:focus {
 
 /* TRANSIT */
 .align-mid {
-	margin-top: 25%;
+	margin-top: 15%;
 }
 
 .ico-big {
@@ -88,10 +97,6 @@ a:focus {
 	padding: 0;
 }
 
-#pbalert {
-	display: none;
-}
-
 .input-hdn {
 	display: none;
 }
@@ -104,10 +109,6 @@ a:focus {
 	width: 50px;
 }
 
-.point:hover {
-	cursor: pointer;
-}
-
 .maxh-150 {
 	height: 150px;
 	width: auto;
@@ -116,4 +117,20 @@ a:focus {
 
 .home-title {
 	color: #dadada;
+}
+
+.col-bl i {
+	color: #007bff;
+}
+
+.col-bl i:hover {
+	color: #005caf;
+}
+
+.table-title h3 {
+	color: #fafafa;
+}
+
+.fa-input {
+	font-family: "Font Awesome 5 Free", serif;
 }

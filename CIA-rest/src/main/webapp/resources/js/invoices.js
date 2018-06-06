@@ -1,7 +1,7 @@
-var inputListType = $('#listType');
-var inputListOldest = $('#listOldest');
-var inputListNewest = $('#listNewest');
-var inputListUser = $('#listPerson');
+var inputListType = $('#filter-type');
+var inputListOldest = $('#filter-oldest');
+var inputListNewest = $('#filter-newest');
+var inputListUser = $('#filter-personId');
 
 $('.more').click(function () {
     $('#details').css('display', 'block');
@@ -52,80 +52,63 @@ $('#submit-delete').on('click', function() {
     $('.details-form form').attr('action', '/accounting/deleteInvoice?id=' + $('#id').val()).submit();
 });
 
-function hideInput(container) {
-    container.addClass('input-hdn');
-    $.each($(container).find('input'), function () {
-        $(this).prop('required', false);
-        $(this).prop('disabled', true);
-    });
-    $.each($(container).find('select'), function () {
-        $(this).prop('required', false);
-        $(this).prop('disabled', true);
-    });
+$('#submit-delete').on('click', function() {
+    $('.details-form form').attr('action', '/accounting/exportInvoice?id=' + $('#id').val()).submit();
+});
+
+function disableInput(input) {
+    $(input).prop('required', false);
+    $(input).prop('disabled', true);
 }
 
-function showInput(container) {
-    container.removeClass('input-hdn');
-    $.each($(container).find('input'), function () {
-        $(this).prop('required', true);
-        $(this).prop('disabled', false);
-    });
-    $.each($(container).find('select'), function () {
-        $(this).prop('required', true);
-        $(this).prop('disabled', false);
-    });
+function enableInput(input) {
+    $(input).prop('required', true);
+    $(input).prop('disabled', false);
 }
 
 inputListType.change(function() {
     var val = $(this).val();
     switch (val) {
-        case 'dates':
-            showInput(inputListOldest);
-            showInput(inputListNewest);
-            hideInput(inputListType);
-            hideInput(inputListUser);
-            break;
-        case 'type':
-            hideInput(inputListOldest);
-            hideInput(inputListNewest);
-            showInput(inputListType);
-            hideInput(inputListUser);
+        case 'date':
+            enableInput(inputListOldest);
+            enableInput(inputListNewest);
+            disableInput(inputListUser);
             break;
         case 'user':
-            hideInput(inputListOldest);
-            hideInput(inputListNewest);
-            hideInput(inputListType);
-            showInput(inputListUser);
+            disableInput(inputListOldest);
+            disableInput(inputListNewest);
+            enableInput(inputListUser);
             break;
-        case 'userAndDate':
-            showInput(inputListOldest);
-            showInput(inputListNewest);
-            hideInput(inputListType);
-            showInput(inputListUser);
-            break;
-        case 'typeAndDate':
-            showInput(inputListOldest);
-            showInput(inputListNewest);
-            showInput(inputListType);
-            hideInput(inputListUser);
-            break;
-        case 'userAndType':
-            showInput(inputListOldest);
-            showInput(inputListNewest);
-            showInput(inputListType);
-            showInput(inputListUser);
+        case 'userDate':
+            enableInput(inputListOldest);
+            enableInput(inputListNewest);
+            enableInput(inputListUser);
             break;
         default: {
-            hideInput(inputListOldest);
-            hideInput(inputListNewest);
-            hideInput(inputListType);
-            hideInput(inputListUser);
+            disableInput(inputListOldest);
+            disableInput(inputListNewest);
+            disableInput(inputListUser);
         }
     }
 });
 
 inputListOldest.change(function() {
-    inputListNewest.min = inputListOldest.val();
+    inputListNewest.prop('min', inputListOldest.val());
 });
 
-$('#list-type').val('all').change();
+inputListNewest.change(function() {
+    inputListOldest.prop('max', inputListNewest.val());
+});
+
+inputListType.val('all').change();
+
+$(".table-hider").on('click', function () {
+    var i = $(this).find('i');
+    if (i.hasClass('fa-angle-right')) {
+        i.removeClass('fa-angle-right');
+        i.addClass('fa-angle-down');
+    } else {
+        i.removeClass('fa-angle-down');
+        i.addClass('fa-angle-right');
+    }
+});
