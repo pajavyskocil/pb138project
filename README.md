@@ -25,6 +25,11 @@ Team members:
 
 `mvn clean install`
 
-`mvn jetty:run`
+`mvn jetty:run-war`
 
-`access localhost:8082/accounting in your browser` 
+`access localhost:8082/accounting/ in your browser` 
+
+# Configuring database
+Database can be configured in the config.conf file. Shortcut to this file is in the root of the application.
+
+
