@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="cs">
+    <info>
+        <title>AccountingWebXML - CIA</title>
+        <author>
+            <personname>Pavel Vyskočil</personname>
+            <email>vyskocilpavel@muni.cz</email>
+        </author>
+    </info>
+
+    <section>
+        <title>Úvod</title>
+        <para>
+            Úkolem našeho projektu bylo vytvořit webovou aplikaci na platformě Java EE pro evidenci příjmů a výdajů,
+            která bude ukládat data do nativní XML databáze.
+        </para>
+        <para>
+            Po předchozí domluvě bylo mým úkolem implementovat jednotlivé entity, třídu DbUtils, která bude zajišťovat
+            spojení naší aplikace s databází a také implementovat managery zajišťující práci s databází.
+        </para>
+    </section>
+    <section>
+        <title>Řešení</title>
+        <para>
+            Prvním krokem byl výběr vhodné XML databáze. Pro naši aplikaci jsme zvolili eXist-db, kterou je nutné
+            nejdříve nainstalovat, spustit a následně v ní vytvořit uživatele, kterého bude naše aplikace používat.
+            Spojení s databází zajišťuje třída DbUtils, která je konfigurovatelná pomocí konfiguračního souboru
+            config.conf, kde uživatel vyplní jméno a heslo uživatele v databázi. Dále pak adresu, kde je databáze dostupná
+            a také názvy kolekcí a jednotlivých resourců. V případě, kdy v databázi neexistuje kolekce nebo resource dle
+            konfiguračního souboru, dojde k jejích vytvoření.
+        </para>
+        <para>
+            Druhým krokem bylo vytvoření entit. Ty byly vytvořeny podle informací, na kterých jsme se dohodli na naší
+            první schůzce. Mezi základní entity použité v naší aplikaci patří entity Person, Invoice a Configuration.
+        </para>
+        <para>
+            Třetím a posledním krokem byla implementace managerů, které zajišťují práci s databází. K tomu slouží základní
+            metody pro vytvoření, úpravu a smazání entity, dále pak metody pro získání objektu z databáze dle jejího Id a
+            získání všech objektů dané entity, který je v případě Invoice parametrizovatelný dle typu. Oba managery
+            jsou dále doplněny o metody pro převod entit do XML a naopak. Při vytvoření managera také dochází k načtení kolekce,
+            případně k jejímu vytvoření pomocí třídy DbUtils.
+        </para>
+    </section>
+    <section>
+        <title>Závěr</title>
+        <para>
+            I když každý člen týmu pracoval na vlastní části aplikace, k dokončení aplikace bylo potřeba notné kooperace
+            mezi jednotlivými členy a to nejen při návrhu aplikace, řešení různých problémů, ale i při správě repozitáře.
+        </para>
+    </section>
+</article>
