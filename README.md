@@ -14,10 +14,11 @@ Team members:
 * Andrej Dravecký
 
 # Prerequsities
-`Install eXistDB on your machine. Create user admin with password admin1. Create collection called accounting.`
+`Install eXistDB on your machine. Configure the access to database in config.conf file.`
+`Install Maven on your machine`
 
 # Running the project
-`Run the eXistDB server on localhost - port 8081`
+`Run the eXistDB server (configuration for server can be changed in config.conf).`
 
 `git clone https://github.com/LizzardCorp/pb138project.git`
 
