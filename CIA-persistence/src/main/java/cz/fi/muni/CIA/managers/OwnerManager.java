@@ -9,9 +9,21 @@ import cz.fi.muni.CIA.entities.Owner;
  */
 public interface OwnerManager {
 
+    /**
+     * This method creates given owned
+     * @param owner Owner to create
+     */
     void createOwner(Owner owner);
 
+    /**
+     * This method updates owner with  given owned
+     * @param owner Owner to update
+     */
     void updateOwner(Owner owner);
 
+    /**
+     * This method retuns Owner
+     * @return Owner
+     */
     Owner getOwner();
 }
