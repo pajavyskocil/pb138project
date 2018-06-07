@@ -1,6 +1,8 @@
 package cz.fi.muni.CIA.entities;
 
 /**
+ * Configuration connected with DB
+ *
  * @author Pavel Vyskocil <vyskocilpavel@muni.cz>
  */
 public class Configuration {

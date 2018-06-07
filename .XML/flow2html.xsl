@@ -152,12 +152,12 @@
             <td>Incomes</td>     
             <td>Amount</td>
         </tr>
-        <xsl:apply-templates select="flowItem/invoice[@type = 'income']" mode="income"/>
+        <xsl:apply-templates select="flowItem/invoice[@type = 'income']"/>
         <tr class="heading">
             <td>Expenses</td>     
             <td>Amount</td>
         </tr>
-        <xsl:apply-templates select="flowItem/invoice[@type = 'expense']" mode="expense"/>
+        <xsl:apply-templates select="flowItem/invoice[@type = 'expense']"/>
         <tr class="heading">
             <td><b>Total:</b></td>
             <td><xsl:value-of select="format-number(sum(flowItem/invoice[@type = 'income']/totalPrice) - sum(flowItem/invoice[@type = 'expense']/totalPrice), '#.00')"/>,-</td>
@@ -169,7 +169,7 @@
             <td>Incomes</td>     
             <td>Amount</td>
         </tr>
-        <xsl:apply-templates select="flowItem/invoice[@type = 'income']" mode="income"/>
+        <xsl:apply-templates select="flowItem/invoice[@type = 'income']"/>
         <tr class="heading">
             <td><b>Total:</b></td>
             <td><xsl:value-of select="format-number(sum(flowItem/invoice[@type = 'income']/totalPrice), '#.00')"/>,-</td>
@@ -181,32 +181,19 @@
             <td>Expenses</td>     
             <td>Amount</td>
         </tr>
-        <xsl:apply-templates select="flowItem/invoice[@type = 'expense']" mode="expense"/>
+        <xsl:apply-templates select="flowItem/invoice[@type = 'expense']"/>
         <tr class="heading">
             <td><b>Total:</b></td>
             <td><xsl:value-of select="format-number(sum(flowItem/invoice[@type = 'expense']/totalPrice), '#.00')"/>,-</td>
         </tr>
     </xsl:template>
 
-    <xsl:template match="invoice" mode="income">
+    <xsl:template match="invoice">
         <tr class="invoice">
             <td>
-                <xsl:value-of select="../person[1]/name"/>
+                <xsl:value-of select="../person/name"/>
                 <br/>
-                <xsl:value-of select="../person[1]/accountNumber"/>
-            </td>
-            <td>
-                <xsl:value-of select="totalPrice"/>,-
-            </td>
-        </tr>
-    </xsl:template>
-
-    <xsl:template match="invoice" mode="expense">
-        <tr class="invoice">
-            <td>
-                <xsl:value-of select="../person[2]/name"/>
-                <br/>
-                <xsl:value-of select="../person[2]/accountNumber"/>
+                <xsl:value-of select="../person/accountNumber"/>
             </td>
             <td>
                 <xsl:value-of select="totalPrice"/>,-

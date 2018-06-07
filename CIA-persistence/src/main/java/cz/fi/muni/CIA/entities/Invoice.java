@@ -2,33 +2,27 @@ package cz.fi.muni.CIA.entities;
 
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 /**
+ * Invoice object
+ *
  * @author Pavel Vyskocil <vyskocilpavel@muni.cz>
  */
 public class Invoice {
 
 	private Long id;
-
 	private Person payer;
-
 	private Person recipient;
-
 	private LocalDate issueDate;
-
 	private LocalDate dueDate;
-
 	private Double price;
-
 	private Set<Item> items = new HashSet<>();
-
 	private InvoiceType invoiceType;
-
 	private String xmlRepresentation;
+
 
 	public Invoice() {
 	}
@@ -112,7 +106,6 @@ public class Invoice {
 	public void setXmlRepresentation(String xmlRepresentation) {
 		this.xmlRepresentation = xmlRepresentation;
 	}
-
 
 	@Override
 	public boolean equals(Object o) {

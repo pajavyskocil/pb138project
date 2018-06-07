@@ -126,7 +126,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">Total</span>
                 </div>
-                <input class="form-control" type="text" id="price" name="price" value="<c:out value="${invoice.price}"/>" <c:out value="${inputParams}"/>>
+                <input class="form-control" type="text" id="price" name="price" value="<c:out value="${invoice.price}"/>" readonly>
                 <div class="input-group-append">
                     <span class="input-group-text">&euro;</span>
                 </div>

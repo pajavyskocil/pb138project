@@ -4,7 +4,7 @@
 	<invoices>
 		<invoice id="1" type="income">
 			<payerID>3</payerID>
-			<recipientID>1</recipientID>
+			<recipientID>0</recipientID>
 			<issueDate>1944-01-13</issueDate>
 			<dueDate>1944-03-20</dueDate>
 			<totalPrice>2500000.00</totalPrice>
@@ -26,7 +26,7 @@
 			</items>
 		</invoice>
 		<invoice id="2" type="expense">
-			<payerID>1</payerID>
+			<payerID>0</payerID>
 			<recipientID>3</recipientID>
 			<issueDate>1944-03-25</issueDate>
 			<dueDate>1944-04-01</dueDate>
@@ -72,12 +72,24 @@
 			<email>stalin23@mail.com</email>
 			<phone>+555 555 555 555</phone>
 			<address>
-				<streetAddress>Cyka</streetAddress>
-				<city>Blyat</city>
+				<streetAddress>Hlavna</streetAddress>
+				<city>Moskwa</city>
 				<country>CCCP</country>
 				<postalCode>no way</postalCode>
 			</address>
 			<accountNumber>12-0000485624/1303</accountNumber>
 		</person>
 	</addressBook>
+	<owner pid="0">
+		<name>Joseph Stalin Jr.</name>
+		<email>stalin33@mail.com</email>
+		<phone>+555 555 555 555</phone>
+		<address>
+			<streetAddress>A</streetAddress>
+			<city>B</city>
+			<country>CCCP</country>
+			<postalCode>no way</postalCode>
+		</address>
+		<accountNumber>12-0123485624/1303</accountNumber>
+	</owner>
 </accounting>

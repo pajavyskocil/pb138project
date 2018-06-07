@@ -3,6 +3,8 @@ package cz.fi.muni.CIA.entities;
 import java.util.Objects;
 
 /**
+ * Address of Person / Owner
+ *
  * @author Pavel Vyskocil <vyskocilpavel@muni.cz>
  */
 public class Address {
@@ -82,9 +84,5 @@ public class Address {
 				", country='" + country + '\'' +
 				", postCode='" + postCode + '\'' +
 				'}';
-	}
-
-	public String getPrettyAddress() {
-		return streetAddress + ", " + city + ", " + postCode + ", " + country;
 	}
 }

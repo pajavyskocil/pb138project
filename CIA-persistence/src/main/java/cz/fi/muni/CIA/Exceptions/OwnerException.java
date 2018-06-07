@@ -1,7 +1,7 @@
 package cz.fi.muni.CIA.Exceptions;
 
 /**
- * Exception marking something not correct has been detected while working with Owner entity.
+ * Exception describing problems with Owner
  *
  * @author Dominik Frantisek Bucik <bucik@ics.muni.cz>
  */

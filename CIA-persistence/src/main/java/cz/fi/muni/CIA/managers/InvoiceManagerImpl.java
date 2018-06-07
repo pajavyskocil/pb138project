@@ -7,6 +7,7 @@ import cz.fi.muni.CIA.entities.Configuration;
 import cz.fi.muni.CIA.entities.Invoice;
 import cz.fi.muni.CIA.entities.InvoiceType;
 import cz.fi.muni.CIA.entities.Item;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.base.CompiledExpression;
 import org.xmldb.api.base.Resource;
@@ -23,6 +24,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Implementation of InvoiceManager
+ *
  * @author Pavel Vyskocil <vyskocilpavel@muni.cz>
  */
 @Named
@@ -30,13 +33,11 @@ public class InvoiceManagerImpl implements InvoiceManager {
 
 	private static final Logger logger = Logger.getLogger(InvoiceManagerImpl.class.getName());
 
-	private Configuration configuration = DbUtils.loadConfig();
+	@Autowired
+	private Configuration configuration;
 
+	@Autowired
 	private Collection collection;
-
-	public InvoiceManagerImpl (Collection collection) {
-		this.collection = collection;
-	}
 
 	@Override
 	public void addInvoice(Invoice invoice) {
@@ -58,7 +59,7 @@ public class InvoiceManagerImpl implements InvoiceManager {
 					"element recipientID {'" + invoice.getRecipient().getId() + "'}, " +
 					"element issueDate {'" + invoice.getIssueDate().toString() + "'}, " +
 					"element dueDate {'" + invoice.getDueDate().toString() + "'}, " +
-					"element totalPrice {'" + invoice.getPrice() + "'}, " +
+					"element totalPrice {'" + String.format("%.2f",invoice.getPrice()) + "'}, " +
 					"element items {" + itemsQuery + "} " +
 					"} into $accounting//invoices";
 			XQueryService service = (XQueryService) collection.getService("XQueryService", "1.0");
@@ -105,7 +106,7 @@ public class InvoiceManagerImpl implements InvoiceManager {
 					"element recipientID {'" + invoice.getRecipient().getId() + "'}, " +
 					"element issueDate {'" + invoice.getIssueDate().toString() + "'}, " +
 					"element dueDate {'" + invoice.getDueDate().toString() + "'}, " +
-					"element totalPrice {'" + invoice.getPrice() + "'}, " +
+					"element totalPrice {'" + String.format("%.2f",invoice.getPrice()) + "'}, " +
 					"element items {" + itemsQuery + "}}";
 			XQueryService service = (XQueryService) collection.getService("XQueryService", "1.0");
 			service.setProperty("indent", "yes");
@@ -132,7 +133,7 @@ public class InvoiceManagerImpl implements InvoiceManager {
 			ResourceSet resourceSet = service.execute(compiledExpression);
 			ResourceIterator resourceIterator = resourceSet.getIterator();
 
-			return DbUtils.invoiceXMLToInvoice(collection, resourceIterator.nextResource().getContent().toString());
+			return DbUtils.invoiceXMLToInvoice(resourceIterator.nextResource().getContent().toString());
 		} catch (XMLDBException ex){
 			logger.log(Level.SEVERE, "XMLDBException during get invoice by id: " + ex.getMessage());
 			throw new InvoiceException("Error during get invoice with id: " + id);
@@ -155,7 +156,7 @@ public class InvoiceManagerImpl implements InvoiceManager {
 
 			while (resourceIterator.hasMoreResources()) {
 				Resource resource = resourceIterator.nextResource();
-				invoiceList.add(DbUtils.invoiceXMLToInvoice(collection, resource.getContent().toString()));
+				invoiceList.add(DbUtils.invoiceXMLToInvoice(resource.getContent().toString()));
 			}
 		} catch (XMLDBException ex) {
 			logger.log(Level.SEVERE, "XMLDBException during get all invoices: " + ex.getMessage());
@@ -189,7 +190,7 @@ public class InvoiceManagerImpl implements InvoiceManager {
 
 			while (resourceIterator.hasMoreResources()) {
 				Resource resource = resourceIterator.nextResource();
-				invoiceList.add(DbUtils.invoiceXMLToInvoice(collection, resource.getContent().toString()));
+				invoiceList.add(DbUtils.invoiceXMLToInvoice(resource.getContent().toString()));
 			}
 		} catch (XMLDBException ex) {
 			logger.log(Level.SEVERE, "XMLDBException during get all invoices in type: "+ type + " " + ex.getMessage());
@@ -214,7 +215,7 @@ public class InvoiceManagerImpl implements InvoiceManager {
 
 			while (resourceIterator.hasMoreResources()) {
 				Resource resource = resourceIterator.nextResource();
-				invoiceList.add(DbUtils.invoiceXMLToInvoice(collection, resource.getContent().toString()));
+				invoiceList.add(DbUtils.invoiceXMLToInvoice(resource.getContent().toString()));
 			}
 		} catch (XMLDBException ex) {
 			logger.log(Level.SEVERE, "XMLDBException during get all invoices for person: "+ personId + " " + ex.getMessage());
@@ -224,21 +225,21 @@ public class InvoiceManagerImpl implements InvoiceManager {
 	}
 
 	private String getItemsQuery(Set<Item> items) {
-		String itemsQuery = "";
+		StringBuilder itemsQuery = new StringBuilder();
 
 		for (Item item:items) {
-			if (itemsQuery != "") {
-				itemsQuery += ", ";
+			if (!itemsQuery.toString().equals("")) {
+				itemsQuery.append(", ");
 			}
 			String itemQuery = "element item {" +
 					"element name {'" + item.getName() + "'}, " +
 					"element description {'" + item.getDescription() + "'} ," +
-					"element price {'" + item.getPrice() + "'} ," +
+					"element price {'" + String.format("%.2f", item.getPrice()) + "'} ," +
 					"element count {'" + item.getCount() + "'} ," +
-					"element totalPrice{'" + item.getTotalPrice() + "'}" +
+					"element totalPrice{'" + String.format("%.2f", item.getTotalPrice()) + "'}" +
 					"}";
-			itemsQuery += itemQuery;
+			itemsQuery.append(itemQuery);
 		}
-		return itemsQuery;
+		return itemsQuery.toString();
 	}
 }

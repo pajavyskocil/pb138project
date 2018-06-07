@@ -1,6 +1,8 @@
 package cz.fi.muni.CIA.Exceptions;
 
 /**
+ * Exception describing problems with DB
+ *
  * @author Pavel Vyskocil <vyskocilpavel@muni.cz>
  */
 public class DatabaseException extends RuntimeException {

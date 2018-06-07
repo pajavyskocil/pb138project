@@ -1,6 +1,8 @@
 package cz.fi.muni.CIA.Exceptions;
 
 /**
+ * Exception describing problems with generating PDF
+ *
  * @author Andrej Dravecký
  */
 public class GeneratorException extends RuntimeException {

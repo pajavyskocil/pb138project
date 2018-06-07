@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="col-md-2 offset-md-2 text-right">
-            <a href="/accounting/exportInvoices" class="btn btn-danger">Export PDF</a>
+            <span class="btn btn-danger" id="export-invoices">Export PDF</span>
         </div>
         <a href="/accounting/createInvoice" class="col-md-1">
             <span class="btn btn-danger"><i class="fas fa-plus"></i></span>

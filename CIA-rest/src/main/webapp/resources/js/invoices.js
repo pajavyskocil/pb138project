@@ -2,6 +2,8 @@ var inputListType = $('#filter-type');
 var inputListOldest = $('#filter-oldest');
 var inputListNewest = $('#filter-newest');
 var inputListUser = $('#filter-personId');
+var inputFrom = $('#from');
+var inputTo = $('#to');
 
 $('.more').click(function () {
     $('#details').css('display', 'block');
@@ -41,7 +43,7 @@ $('#details-close').on('click', function() {
     $('#details').css('display', 'none');
     $.each($('.item-record'), function () {
         this.remove();
-    })
+    });
 });
 
 $('#submit-edit').on('click', function() {
@@ -52,10 +54,17 @@ $('#submit-delete').on('click', function() {
     $('.details-form form').attr('action', '/accounting/deleteInvoice?id=' + $('#id').val()).submit();
 });
 
-$('#submit-delete').on('click', function() {
+$('#submit-pdf').on('click', function() {
     $('.details-form form').attr('action', '/accounting/exportInvoice?id=' + $('#id').val()).submit();
 });
 
+$('#export-invoices').on('click', function() {
+    $('#export').css('display', 'block');
+});
+
+$('#export-close').on('click', function() {
+    $('#export').css('display', 'none');
+});
 function disableInput(input) {
     $(input).prop('required', false);
     $(input).prop('disabled', true);
@@ -98,6 +107,14 @@ inputListOldest.change(function() {
 
 inputListNewest.change(function() {
     inputListOldest.prop('max', inputListNewest.val());
+});
+
+inputFrom.change(function() {
+    inputTo.prop('min', inputFrom.val());
+});
+
+inputTo.change(function() {
+    inputFrom.prop('max', inputTo.val());
 });
 
 inputListType.val('all').change();

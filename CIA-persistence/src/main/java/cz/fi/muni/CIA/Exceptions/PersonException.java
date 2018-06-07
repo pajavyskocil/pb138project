@@ -1,6 +1,8 @@
 package cz.fi.muni.CIA.Exceptions;
 
 /**
+ * Exception describing problems with Person
+ *
  * @author Pavel Vyskocil <vyskocilpavel@muni.cz>
  */
 public class PersonException extends RuntimeException {

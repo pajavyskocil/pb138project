@@ -17,6 +17,38 @@
     <o:invoiceTable invoices="${expenses}" invoicesType="Expenses"/>
 </main>
 
+<div class="jumbotron" id="export">
+    <div class="container export-form">
+        <div class="row">
+            <div class="col-md-1 offset-md-11">
+                <i id="export-close" class="point fas fa-times"></i>
+            </div>
+        </div>
+        <h3 id="export-header" class="mb-3 text-center">Export invoices</h3>
+        <form action="/accounting/exportInvoices">
+            <div class="row mb-3">
+                <div class="col-md-6 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">From date</span>
+                    </div>
+                    <input id="from" class="form-control" name="from" type="date" required>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">To date</span>
+                    </div>
+                    <input id="to" class="form-control" name="to" type="date" required>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <input class="form-control btn btn-danger" type="submit" value="Export">
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="jumbotron" id="details">
     <div class="container details-form">
         <div class="row">

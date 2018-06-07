@@ -124,14 +124,26 @@
                             <td colspan="2">
                                 <table>
                                     <tr>
-                                        <td>
-                                            <b>buyer:</b><br/>
-                                            <xsl:apply-templates select="person[1]"/>
-                                        </td>
-                                        <td>
-                                            <b>seller:</b><br/>
-                                            <xsl:apply-templates select="person[2]"/>
-                                        </td>
+                                        <xsl:if test="invoice/@type='income'">
+                                            <td>
+                                                <b>Buyer:</b><br/>
+                                                <xsl:apply-templates select="person"/>
+                                            </td>
+                                            <td>
+                                                <b>Seller:</b><br/>
+                                                <xsl:apply-templates select="owner"/>
+                                            </td>
+                                        </xsl:if>
+                                        <xsl:if test="invoice/@type='expense'">
+                                            <td>
+                                                <b>Buyer:</b><br/>
+                                                <xsl:apply-templates select="owner"/>
+                                            </td>
+                                            <td>
+                                                <b>Seller:</b><br/>
+                                                <xsl:apply-templates select="person"/>
+                                            </td>
+                                        </xsl:if>
                                     </tr>
                                 </table>
                             </td>
@@ -205,7 +217,7 @@
         </tr>  
     </xsl:template>
 
-    <xsl:template match="person">
+    <xsl:template match="person | owner">
         <xsl:value-of select="name"/>
         <br/>
         <xsl:value-of select="address/streetAddress"/>
@@ -215,7 +227,7 @@
         <br/>
         <xsl:value-of select="address/country"/>
     </xsl:template>
-    
+
     
 
 </xsl:stylesheet>
