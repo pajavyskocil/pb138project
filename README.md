@@ -15,6 +15,7 @@ Team members:
 
 # Prerequsities
 `Install eXistDB on your machine. Configure the access to database in config.conf file.`
+
 `Install Maven on your machine`
 
 # Running the project
