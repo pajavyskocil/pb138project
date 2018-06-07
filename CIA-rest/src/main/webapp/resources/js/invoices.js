@@ -65,7 +65,6 @@ $('#export-invoices').on('click', function() {
 $('#export-close').on('click', function() {
     $('#export').css('display', 'none');
 });
-
 function disableInput(input) {
     $(input).prop('required', false);
     $(input).prop('disabled', true);
