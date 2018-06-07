@@ -1,12 +1,11 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-
 	<xsd:element name="accounting">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element name="owner" type="ownerType" />
 				<xsd:element name="invoices" type="invoiceList"/>
 				<xsd:element name="addressBook" type="addressBookType"/>
+				<xsd:element name="owner" type="ownerType" minOccurs="0"/>
 			</xsd:sequence>
 		</xsd:complexType>
 		<xsd:unique name="uniqueId">
@@ -117,7 +116,7 @@
 	
 	<xsd:simpleType name="bankAccNumType">
 		<xsd:restriction base="xsd:string"> 
-			<xsd:pattern value="(\d{1,10}\-)?[0-9]{10}/[0-9]{4}"/> 
+			<xsd:pattern value="[0-9]{10}/[0-9]{4}"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 

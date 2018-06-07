@@ -38,13 +38,13 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">Phone</span>
                 </div>
-                <input class="form-control" type="tel" name="phoneNumber" value="<c:out value="${person.phoneNumber}"/>" <c:out value="${inputParams}"/>>
+                <input class="form-control" type="text" name="phoneNumber" placeholder="+000 123 456 789" title="In format +000 123 456 789" pattern="\+[0-9]{3} [0-9]{3} [0-9]{3} [0-9]{3}" value="<c:out value="${person.phoneNumber}"/>" <c:out value="${inputParams}"/>>
             </div>
             <div class="col-md-6 input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Account nr.</span>
                 </div>
-                <input class="form-control" type="text" name="accountNumber" value="<c:out value="${person.accountNumber}"/>" <c:out value="${inputParams}"/>>
+                <input class="form-control" type="text" name="accountNumber" placeholder="0000123456/7890" title="In format 0000123456/7890" pattern="[0-9]{10}/[0-9]{4}" value="<c:out value="${person.accountNumber}"/>" <c:out value="${inputParams}"/>>
             </div>
         </div>
         <div class="row mb-3">

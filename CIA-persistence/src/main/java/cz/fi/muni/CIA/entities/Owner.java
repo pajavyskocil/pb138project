@@ -2,6 +2,11 @@ package cz.fi.muni.CIA.entities;
 
 import java.util.Objects;
 
+/**
+ * Owner - main representing person who is manager of accounting subject
+ *
+ * @author Dominik Frantisek Bucik <bucik@ics.muni.cz>
+ */
 public class Owner extends Person {
 
     private String logoBASE64;

@@ -6,6 +6,9 @@
 <o:header title="${title}" />
 <div class="container">
     <div class="align-mid">
+        <c:if test="${not empty message}">
+            <o:alert alertType="${alertType}" message="${message}"/>
+        </c:if>
         <div class="row mb-5 mt-4 text-center">
             <h1 class="col-md-12 home-title"><c:out value="${title}" /></h1>
         </div>
@@ -47,14 +50,6 @@
                 </c:otherwise>
             </c:choose>
         </div>
-        <c:if test="${not empty message}">
-            <div class="row mb-2">
-                <div class="alert alert-danger alert-dismissible col-md-6 offset-md-3 <c:out value='${alertType}'/>">
-                    <button class="close" data-dismiss="alert">&times;</button>
-                    <strong><c:out value="${message}"/></strong>
-                </div>
-            </div>
-        </c:if>
     </div>
 </div>
 <o:footer />

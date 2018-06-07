@@ -6,6 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.xmldb.api.base.Collection;
 
+
 /**
  * class PersistenceApplicationContext
  *
@@ -16,20 +17,27 @@ import org.xmldb.api.base.Collection;
 public class PersistenceApplicationContext {
 
 	@Bean
+	public cz.fi.muni.CIA.entities.Configuration configuration() {
+		return DbUtils.loadConfig();
+	}
+
+	@Bean
 	public Collection dataSource(){
-		return DbUtils.loadCollection(DbUtils.loadConfig());
+		return DbUtils.loadCollection(configuration());
 	}
 
 	@Bean
 	public PersonManager personManager() {
-		return new PersonManagerImpl(dataSource());
+		return new PersonManagerImpl();
 	}
 
 	@Bean
 	public InvoiceManager invoiceManager() {
-		return new InvoiceManagerImpl(dataSource());
+		return new InvoiceManagerImpl();
 	}
 
 	@Bean
-	public OwnerManager ownerManager() { return new OwnerManagerImpl(dataSource()); }
+	public OwnerManager ownerManager() {
+		return new OwnerManagerImpl();
+	}
 }

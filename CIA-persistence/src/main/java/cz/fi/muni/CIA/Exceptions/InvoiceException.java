@@ -1,6 +1,8 @@
 package cz.fi.muni.CIA.Exceptions;
 
 /**
+ * Exception describing problems with Invoice
+ *
  * @author Pavel Vyskocil <vyskocilpavel@muni.cz>
  */
 public class InvoiceException extends RuntimeException {

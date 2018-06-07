@@ -4,6 +4,7 @@ import cz.fi.muni.CIA.DbUtils;
 import cz.fi.muni.CIA.Exceptions.OwnerException;
 import cz.fi.muni.CIA.entities.Configuration;
 import cz.fi.muni.CIA.entities.Owner;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.xmldb.api.base.*;
 import org.xmldb.api.modules.XQueryService;
 
@@ -12,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Manager for Person entity
+ * Implementation of OwnerManager
  *
  * @author Dominik Frantisek Bucik <bucik@ics.muni.cz>
  */
@@ -20,15 +21,12 @@ import java.util.logging.Logger;
 public class OwnerManagerImpl implements OwnerManager {
 
     private static final Logger logger = Logger.getLogger(OwnerManagerImpl.class.getName());
-    private static final Long OWNER_ID = 1L;
 
-    private Configuration configuration = DbUtils.loadConfig();
+    @Autowired
+    private Configuration configuration;
 
+    @Autowired
     private Collection collection;
-
-    public OwnerManagerImpl(Collection collection) {
-        this.collection = collection;
-    }
 
     @Override
     public void createOwner(Owner owner) {

@@ -5,6 +5,8 @@ import cz.fi.muni.CIA.entities.Person;
 import java.util.List;
 
 /**
+ * Manager for working with Person object
+ *
  * @author Pavel Vyskocil <vyskocilpavel@muni.cz>
  */
 public interface PersonManager {

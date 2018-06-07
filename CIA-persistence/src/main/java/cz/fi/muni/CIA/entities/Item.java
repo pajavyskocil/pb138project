@@ -3,6 +3,8 @@ package cz.fi.muni.CIA.entities;
 import java.util.Objects;
 
 /**
+ * Item in Invoice
+ *
  * @author Pavel Vyskocil <vyskocilpavel@muni.cz>
  */
 public class Item {

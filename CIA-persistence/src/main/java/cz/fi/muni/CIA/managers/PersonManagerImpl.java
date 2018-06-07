@@ -4,6 +4,7 @@ import cz.fi.muni.CIA.DbUtils;
 import cz.fi.muni.CIA.Exceptions.PersonException;
 import cz.fi.muni.CIA.entities.Configuration;
 import cz.fi.muni.CIA.entities.Person;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.xmldb.api.base.CompiledExpression;
 import org.xmldb.api.base.Resource;
 import org.xmldb.api.base.ResourceIterator;
@@ -20,19 +21,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Implementation of PersonManager
+ *
  * @author Pavel Vyskocil <vyskocilpavel@muni.cz>
  */
 @Named
 public class PersonManagerImpl implements PersonManager {
 	private static final Logger logger = Logger.getLogger(PersonManagerImpl.class.getName());
 
-	private Configuration configuration = DbUtils.loadConfig();
+	@Autowired
+	private Configuration configuration;
 
+	@Autowired
 	private Collection collection;
-
-	public PersonManagerImpl(Collection collection) {
-		this.collection = collection;
-	}
 
 	@Override
 	public void createPerson(Person person) {

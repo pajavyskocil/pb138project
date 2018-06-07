@@ -23,7 +23,7 @@ import java.nio.file.Files;
  * @author Dominik Frantisek Bucik <bucik@ics.muni.cz>
  */
 @Controller
-public class LoginController {
+public class HomeController {
 
     @Autowired
     private OwnerService ownerService;
@@ -63,12 +63,13 @@ public class LoginController {
             message = "No owner entry has been defined";
             viewName = "redirect:/accounting/";
             redirectAttributes.addFlashAttribute("message", message);
-            redirectAttributes.addFlashAttribute("alertType", "alert-danger");
+            redirectAttributes.addFlashAttribute("alertType", "alert-success");
         } else {
             viewName = "ownerDetail";
-            model.addAttribute("action", "editOwner");
             model.addAttribute("owner", ownerService.getOwner());
+            redirectAttributes.addFlashAttribute("alertType", "alert-danger");
             model.addAttribute("title", "Edit owner");
+            model.addAttribute("action", "editOwner");
         }
         return viewName;
     }
@@ -86,7 +87,7 @@ public class LoginController {
                            SessionStatus sessionStatus) {
         String message, viewName;
         try {
-            if (file != null) {
+            if (file != null && !file.isEmpty()) {
                 String base64Logo = DatatypeConverter.printBase64Binary(file.getBytes());
                 String logoPre = "data:" + file.getContentType() + "; base64,";
                 owner.setLogoBASE64(logoPre + base64Logo);
@@ -94,12 +95,12 @@ public class LoginController {
             owner.setAddress(address);
             ownerService.createOwner(owner);
 
-            message = "Entry of owner with name: " + owner.getName() + " created";
+            message = "Entry of owner " + owner.getName() + " created";
             viewName = "redirect:/accounting/";
             redirectAttributes.addFlashAttribute("alertType", "alert-success");
             sessionStatus.setComplete();
         } catch (Exception ex) {
-            message = "Error has occurred when creating entry in database, please try again!";
+            message = "Error has occurred when saving changes, please try again...";
             viewName = "redirect:/accounting/ownerOperationFailed";
             redirectAttributes.addFlashAttribute("owner", owner);
             redirectAttributes.addFlashAttribute("alertType", "alert-danger");
@@ -118,7 +119,7 @@ public class LoginController {
                             SessionStatus sessionStatus) {
         String message, viewName;
         try {
-            if (file != null) {
+            if (file != null && !file.isEmpty()) {
                 String base64Logo = DatatypeConverter.printBase64Binary(file.getBytes());
                 String logoPre = "data:" + file.getContentType() + "; base64,";
                 owner.setLogoBASE64(logoPre + base64Logo);
@@ -127,11 +128,11 @@ public class LoginController {
             ownerService.updateOwner(owner);
 
             viewName = "redirect:/accounting/";
-            message = "Entry of owner with name: " + owner.getName() + " edited";
+            message = "Entry of owner " + owner.getName() + " edited";
             redirectAttributes.addFlashAttribute("alertType", "alert-success");
             sessionStatus.setComplete();
         } catch (Exception ex) {
-            message = "Error has occurred when editing entry in database, please try again...";
+            message = "Error has occurred when saving changes, please try again...";
             viewName = "redirect:/accounting/ownerOperationFailed";
             redirectAttributes.addFlashAttribute("owner", owner);
             redirectAttributes.addFlashAttribute("alertType", "alert-danger");
